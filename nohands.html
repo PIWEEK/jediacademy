@@ -1,0 +1,25 @@
+<html>
+    <head>
+      <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
+      <script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
+
+      <script src="components/floating-lightsaber.js"></script>
+    </head>
+    <body>
+      <a-scene>
+            <a-assets>
+                <a-asset-item id="lightsaber" src="models/lightsaber.dae"></a-asset-item>
+            </a-assets>
+
+            <a-entity id="camera" camera look-controls wasd-controls position="0 1.6 0">
+            </a-entity>
+
+            <a-entity id="floatingLsContainer" floating-lightsaber="color: red; target: #camera" position="0 2 -1"></a-entity>
+
+
+            
+            
+            <a-entity environment="preset: yavapai; numDressing: 500"></a-entity>
+      </a-scene>
+    </body>
+  </html>
