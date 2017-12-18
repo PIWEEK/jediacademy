@@ -18,6 +18,13 @@
         <a-asset-item id="exoItalicFont" src="https://cdn.glitch.com/c719c986-c0c5-48b8-967c-3cd8b8aa17f3%2Fexo2BlackItalic.typeface.json?1490305922725"></a-asset-item>
         -->
         <a-asset-item id="lightsaber" src="models/lightsaber.dae"></a-asset-item>
+
+
+        <a-mixin id="light"
+        geometry="primitive: cylinder; radius='0.15'; height='12'"
+        material="color: #FFF; shader: flat"
+        light="color: #0000FF; distance: 1; intensity: 1; type: point"></a-mixin>
+
       </a-assets>
 
 
@@ -30,8 +37,19 @@
 
       <a-sphere position="10 10 0.75" radius="0.75" color="#EF2D5E"></a-sphere>
 
+      <a-entity position="1 1 1.5" scale="0.25 0.25 0.25" rotation="-15 0 0">
+        <a-cylinder position="0 0.285 8.221" radius="0.15" height="12" color="#0000FF" rotation="90 0 0"></a-cylinder>
+        <a-collada-model position="0 0 0"  src="#lightsaber"  rotation="0 90 0"></a-model>
 
-      <a-collada-model position="0 2 0.2"  src="#lightsaber" scale="0.25 0.25 0.25" rotation="0 0 -45"></a-model>
+
+      </a-entity>
+
+
+<!--
+      <a-entity light="type: ambient; color: #BBB"></a-entity>
+      <a-entity light="type: directional; color: #FFF; intensity: 0.6" position="-0.5 1 1"></a-entity>
+-->
+
 
 
 
