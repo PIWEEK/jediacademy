@@ -19,9 +19,8 @@
                 <a-asset-item id="ls-hilt-obj" src="model/lightsaber.obj"></a-asset-item>
                 <a-asset-item id="ls-hilt-mtl" src="model/lightsaber.mtl"></a-asset-item>   
 
-                <a-asset-item id="training-robot-obj" src="model/training-robot-2.obj"></a-asset-item>
-                <a-asset-item id="training-robot-mtl" src="model/training-robot-2.mtl"></a-asset-item>   
-                
+                <a-asset-item id="training-robot-dae" src="model/training-robot-2.dae"></a-asset-item>
+
                 <img id="yoda-img" src="img/yoda.png" crossorigin="anonymous" />
                 <img id="training-robot-img" src="img/training_robot.jpg" crossorigin="anonymous" />                
             </a-assets>
@@ -51,6 +50,10 @@
             </a-entity>            
             
             <a-entity environment="preset: yavapai; numDressing: 500"></a-entity>
+
+
+            <!-- Preload -->
+            <a-collada-model id="training-robot" src="#training-robot-dae" scale="0.5 0.5 0.5" visible="false"></a-collada-model>
       </a-scene>
     </body>
   </html>

@@ -26,11 +26,8 @@ AFRAME.registerComponent('training-robot', {
 
 
         // Robot
-        var entity = document.createElement('a-entity');
-        entity.id = "training-robot";
-        entity.setAttribute('obj-model', 'obj: #training-robot-obj');
-        entity.setAttribute('scale', '0.16 0.16 0.16');
-        entity.setAttribute('rotation', '0 0 -90');
+        var entity = document.querySelector('#training-robot');
+        entity.setAttribute('rotation', '0 0 0');
         
         this.el.appendChild(entity);
         this.trainingRobot = entity;
@@ -55,11 +52,13 @@ AFRAME.registerComponent('training-robot', {
           self.numHits = 0;
           self.el.setAttribute('position', '10 1.5 -20');
           self.el.setAttribute('visible', true);
+          self.trainingRobot.setAttribute('visible', true);
         });
 
         this.el.addEventListener('disable', function (event) {          
           self.enabled = false;
           self.el.setAttribute('position', '0 -100 -20');
+          self.trainingRobot.setAttribute('visible', false);
         });
 
 
@@ -86,20 +85,33 @@ AFRAME.registerComponent('training-robot', {
         directionVec3.copy(targetPosition).sub(currentPosition);
         // Calculate the distance.
         var distance = directionVec3.length();
-        // Don't go any closer if a close proximity has been reached.
-        if (distance < 4) { return; }
         // Scale the direction vector's magnitude down to match the speed.
         var factor = 10 / distance;
         ['x', 'y', 'z'].forEach(function (axis) {
           directionVec3[axis] *= factor * (timeDelta / 1000);
         });
-        // Translate the entity in the direction towards the target.
-        this.el.setAttribute('position', {
-          x: currentPosition.x + directionVec3.x,
-          // Do not change height
-          y: currentPosition.y,// + directionVec3.y,
-          z: currentPosition.z + directionVec3.z
-        });
+
+
+        // Don't go any closer if a close proximity has been reached.
+        if (distance < 10) { 
+          // Translate the entity in the direction against the target.
+          this.el.setAttribute('position', {
+            x: currentPosition.x - directionVec3.x,
+            // Do not change height
+            y: currentPosition.y,// + directionVec3.y,
+            z: currentPosition.z - directionVec3.z
+          });
+
+        } else if (distance > 10.1) { 
+          
+          // Translate the entity in the direction towards the target.
+          this.el.setAttribute('position', {
+            x: currentPosition.x + directionVec3.x,
+            // Do not change height
+            y: currentPosition.y,// + directionVec3.y,
+            z: currentPosition.z + directionVec3.z
+          });
+        }
       },
 
       

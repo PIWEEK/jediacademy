@@ -109,20 +109,32 @@ AFRAME.registerComponent('floating-lightsaber', {
         directionVec3.copy(targetPosition).sub(currentPosition);
         // Calculate the distance.
         var distance = directionVec3.length();
-        // Don't go any closer if a close proximity has been reached.
-        if (distance < 1.2) { return; }
+
         // Scale the direction vector's magnitude down to match the speed.
         var factor = 10 / distance;
         ['x', 'y', 'z'].forEach(function (axis) {
           directionVec3[axis] *= factor * (timeDelta / 1000);
         });
-        // Translate the entity in the direction towards the target.
-        this.el.setAttribute('position', {
-          x: currentPosition.x + directionVec3.x,
-          // Do not change height
-          y: currentPosition.y,// + directionVec3.y,
-          z: currentPosition.z + directionVec3.z
-        });
+
+        // Don't go any closer if a close proximity has been reached.
+        if (distance < 1.1) { 
+          // Translate the entity in the direction against the target.
+          this.el.setAttribute('position', {
+            x: currentPosition.x - directionVec3.x,
+            // Do not change height
+            y: currentPosition.y,// + directionVec3.y,
+            z: currentPosition.z - directionVec3.z
+          });
+        } else if (distance > 1.2) { 
+          
+          // Translate the entity in the direction towards the target.
+          this.el.setAttribute('position', {
+            x: currentPosition.x + directionVec3.x,
+            // Do not change height
+            y: currentPosition.y,// + directionVec3.y,
+            z: currentPosition.z + directionVec3.z
+          });
+        }
       },
 
       
@@ -241,7 +253,7 @@ AFRAME.registerComponent('floating-lightsaber', {
 
       addSwing: function() {
         this.numSwings += 1;
-        if (this.numSwings >= 3) {
+        if (this.numSwings >= 11) {
           this.enabled = false;
           this.el.setAttribute('visible', false);
           this.finalText = "TRAINING END\n\nSwings: " + (this.numSwings -1)+ "\nHits: " + this.numHits;
