@@ -7,6 +7,7 @@
       <script src="https://unpkg.com/aframe-aabb-collider-component/dist/aframe-aabb-collider-component.min.js"></script> 
 
       <script src="components/floating-lightsaber.js"></script>
+      <script src="components/training-robot.js"></script>
       <script src="components/menuselector.js"></script>
       <script src="components/hud.js"></script>
 
@@ -17,6 +18,9 @@
             <a-assets>   
                 <a-asset-item id="ls-hilt-obj" src="model/lightsaber.obj"></a-asset-item>
                 <a-asset-item id="ls-hilt-mtl" src="model/lightsaber.mtl"></a-asset-item>   
+
+                <a-asset-item id="training-robot-obj" src="model/training-robot-2.obj"></a-asset-item>
+                <a-asset-item id="training-robot-mtl" src="model/training-robot-2.mtl"></a-asset-item>   
                 
                 <img id="yoda-img" src="img/yoda.png" crossorigin="anonymous" />
                 <img id="training-robot-img" src="img/training_robot.jpg" crossorigin="anonymous" />                
@@ -24,6 +28,7 @@
             
             <!-- ENEMIES / minigames -->
             <a-entity id="floatingLsGame" floating-lightsaber="color: red; speed: 0.25; target: #camera" position="0 -100 -20"></a-entity>
+            <a-entity id="trainingRobotGame" training-robot="speed: 0.5; target: #camera" position="0 -100 -20"></a-entity>
 
             
 
@@ -31,7 +36,7 @@
             <!-- MENU -->
             <a-entity id="menuFloatingLs" menu-selector="photo: #yoda-img; minigame: #floatingLsGame" position="0 1.5 -2"></a-entity>
 
-            <a-entity id="menuTrainingRobot" menu-selector="photo: #training-robot-img; minigame: #floatingLsGame" position="3 1.5 -1" rotation="0 -45 0"></a-entity>
+            <a-entity id="menuTrainingRobot" menu-selector="photo: #training-robot-img; minigame: #trainingRobotGame" position="3 1.5 -1" rotation="0 -45 0"></a-entity>
 
             <!--a-plane color="#CCC" height="1" width="1" position="0 1.5 -2"></a-plane-->
 

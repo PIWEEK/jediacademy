@@ -25,8 +25,6 @@ AFRAME.registerComponent('floating-lightsaber', {
 
 
         this.directionVec3 = new THREE.Vector3();
-        this.positionVec3 = new THREE.Vector3();
-        this.scaleVec3 = new THREE.Vector3();
 
         //Hit light
         var entity = document.createElement('a-entity');
