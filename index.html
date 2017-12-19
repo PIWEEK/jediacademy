@@ -1,69 +1,41 @@
-<!-- Based on Vaporware By Ada Rose Edwards @lady_ada_king. -->
-<!DOCTYPE html>
 <html>
-  <head>
-    <title>jedy academy test01</title>
-    <meta name="description" content="Vaporwave aesthetic text By Ada Rose Edwards (@lady_ada_king).">
-    <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
-    <script src="https://unpkg.com/aframe-text-geometry-component@0.5.1/dist/aframe-text-geometry-component.min.js"></script>
-  </head>
-  <body>
-    <a-scene>
-      <a-assets>
-        <img id="grid" src="img/grid.jpg" crossorigin="anonymous">
-        <img id="sky" src="img/sky.jpg" crossorigin="anonymous" />
-        <!--
-        <a-asset-item id="dawningFont" src="https://cdn.glitch.com/c719c986-c0c5-48b8-967c-3cd8b8aa17f3%2FdawningOfANewDayRegular.typeface.json?1490305922844"></a-asset-item>
-        <a-asset-item id="exoFont" src="https://cdn.glitch.com/c719c986-c0c5-48b8-967c-3cd8b8aa17f3%2Fexo2Black.typeface.json?1490305922150"></a-asset-item>
-        <a-asset-item id="exoItalicFont" src="https://cdn.glitch.com/c719c986-c0c5-48b8-967c-3cd8b8aa17f3%2Fexo2BlackItalic.typeface.json?1490305922725"></a-asset-item>
-        -->
-        <a-asset-item id="lightsaber" src="models/lightsaber.dae"></a-asset-item>
+    <head>
+      <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
+      <script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
 
 
-        <a-mixin id="light"
-        geometry="primitive: cylinder; radius='0.15'; height='12'"
-        material="color: #FFF; shader: flat"
-        light="color: #0000FF; distance: 1; intensity: 1; type: point"></a-mixin>
+      <script src="https://unpkg.com/aframe-aabb-collider-component/dist/aframe-aabb-collider-component.min.js"></script> 
 
-      </a-assets>
+      <script src="components/floating-lightsaber.js"></script>
+      <script src="components/menuselector.js"></script>
 
-
-
-
-      <a-entity
-        geometry="primitive: plane; width: 10000; height: 10000;" rotation="-90 0 0"
-        material="src: #grid; repeat: 10000 10000; sphericalEnvMap: #sky;">
-
-
-      <a-sphere position="10 10 0.75" radius="0.75" color="#EF2D5E"></a-sphere>
-
-      <a-entity position="1 1 1.5" scale="0.25 0.25 0.25" rotation="-15 0 0">
-        <a-cylinder position="0 0.285 8.221" radius="0.15" height="12" color="#0000FF" rotation="90 0 0"></a-cylinder>
-        <a-collada-model position="0 0 0"  src="#lightsaber"  rotation="0 90 0"></a-model>
+      <script src="components/jediacademy.js"></script>
+    </head>
+    <body>
+      <a-scene jediacademy>
+            <a-assets>   
+                <a-asset-item id="ls-hilt-obj" src="model/lightsaber.obj"></a-asset-item>
+                <a-asset-item id="ls-hilt-mtl" src="model/lightsaber.mtl"></a-asset-item>   
+                
+                <img id="yoda" src="img/yoda.png" crossorigin="anonymous" />
+            </a-assets>
+            
+            <!-- ENEMIES / minigames -->
+            <a-entity id="floatingLsGame" floating-lightsaber="color: red; speed: 0.25; target: #camera" position="0 -100 -20"></a-entity>
 
 
-      </a-entity>
+            <!-- MENU -->
+            <a-entity id="menuFloatingLs" menu-selector="photo: #yoda; minigame: #floatingLsGame" position="0 1.5 -2"></a-entity>
+
+            <!--a-plane color="#CCC" height="1" width="1" position="0 1.5 -2"></a-plane-->
 
 
-<!--
-      <a-entity light="type: ambient; color: #BBB"></a-entity>
-      <a-entity light="type: directional; color: #FFF; intensity: 0.6" position="-0.5 1 1"></a-entity>
--->
-
-
-
-
-
-    </a-entity>
-
-
-    <a-entity position="0 0 2">
-      <a-camera></a-camera>
-    </a-entity>
-
-
-
-      <a-sky src="#sky" rotation="0 -90 0"></a-sky>
-    </a-scene>
-  </body>
-</html>
+            <a-entity id="camera" camera look-controls wasd-controls position="0 1.6 0">
+                <a-entity id="player-body" geometry="primitive: box; height: 1.6; width: 0.2; depth:0.2" position="0 -0.6 0"
+                material="opacity: 1" aabb-collider="objects: .collideable"></a-entity>
+            </a-entity>            
+            
+            <a-entity environment="preset: yavapai; numDressing: 500"></a-entity>
+      </a-scene>
+    </body>
+  </html>
