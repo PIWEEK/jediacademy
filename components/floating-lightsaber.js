@@ -1,10 +1,25 @@
 AFRAME.registerComponent('floating-lightsaber', {  
     schema: {
         color: {type: 'string'},
+        speed: {type: 'number'},
         target: {type: 'selector'}
       },
 
     init: function() {    
+        this.MODE_PREPARE_RIGHT = 0;
+        this.MODE_SWING_RIGHT_LEFT = 1;
+        this.MODE_GUARD_LEFT_CENTER = 2;
+        this.MODE_PREPARE_LEFT = 3;
+        this.MODE_SWING_LEFT_RIGHT = 4;
+        this.MODE_GUARD_RIGHT_CENTER = 5;
+
+        this.mode = this.MODE_PREPARE_RIGHT;
+
+        
+        
+
+
+
         this.directionVec3 = new THREE.Vector3();
         this.positionVec3 = new THREE.Vector3();
         this.scaleVec3 = new THREE.Vector3();
@@ -29,10 +44,10 @@ AFRAME.registerComponent('floating-lightsaber', {
         this.el.appendChild(entity);
         this.lightsaberBlade = entity;
 
-
+/*
         var entity = document.createElement('a-entity');
         entity.id = "floating-lightsaber-hilt";
-        entity.setAttribute('collada-model', '#ls-hilt-dae');   
+        entity.setAttribute('collada-model', '#ls-hilt-dae');
         
         this.scaleVec3.x = 0.1
         this.scaleVec3.y = 0.1
@@ -50,14 +65,14 @@ AFRAME.registerComponent('floating-lightsaber', {
 
         this.el.appendChild(entity);
         this.lightsaberHilt = entity;
-
+*/
 
 
         
     },
 
 
-    tick2: function (time, timeDelta) {
+    follow: function (time, timeDelta) {
         var directionVec3 = this.directionVec3;
         // Grab position vectors (THREE.Vector3) from the entities' three.js objects.
         var targetPosition = this.data.target.object3D.position;
@@ -68,7 +83,7 @@ AFRAME.registerComponent('floating-lightsaber', {
         // Calculate the distance.
         var distance = directionVec3.length();
         // Don't go any closer if a close proximity has been reached.
-        if (distance < 2) { return; }
+        if (distance < 1.2) { return; }
         // Scale the direction vector's magnitude down to match the speed.
         var factor = 10 / distance;
         ['x', 'y', 'z'].forEach(function (axis) {
@@ -83,16 +98,64 @@ AFRAME.registerComponent('floating-lightsaber', {
       },
 
       tick: function (time, timeDelta) {
+        this.follow(time, timeDelta);
+
+
         var el = this.el;
         var rotationTmp = this.rotationTmp = this.rotationTmp || {x: 0, y: 0, z: 0};
         var rotation = el.getAttribute('rotation');
 
-        
-        rotationTmp.z = rotation.z + 2;
-        //rotationTmp.y = rotation.y + 0.1;
-        //rotationTmp.z = rotation.z + 0.1;
-        el.setAttribute('rotation', rotationTmp);
-        
+        var inc = this.data.speed * timeDelta;
 
+
+        if (this.mode == this.MODE_PREPARE_RIGHT) {          
+          if (rotation.z >= 90){
+              this.mode = this.MODE_SWING_RIGHT_LEFT;
+          } else {
+            rotationTmp.z = rotation.z + inc;
+            el.setAttribute('rotation', rotationTmp);
+          }
+        } else if (this.mode == this.MODE_PREPARE_LEFT) {       
+          if (rotation.z <= -90){
+              this.mode = this.MODE_SWING_LEFT_RIGHT;              
+          } else {
+            rotationTmp.z = rotation.z - inc;
+            el.setAttribute('rotation', rotationTmp);
+          }
+        } else if (this.mode == this.MODE_SWING_RIGHT_LEFT) {                
+          if (rotation.y>=180){
+              this.mode = this.MODE_GUARD_LEFT_CENTER;
+          } else {
+            rotationTmp.y = rotation.y + inc;
+            el.setAttribute('rotation', rotationTmp);
+          }
+        } else if (this.mode == this.MODE_SWING_LEFT_RIGHT) {                
+          if (rotation.y<=-180){
+              this.mode = this.MODE_GUARD_RIGHT_CENTER;
+          } else {
+            rotationTmp.y = rotation.y - inc;
+            el.setAttribute('rotation', rotationTmp);
+          }
+        } else if (this.mode == this.MODE_GUARD_LEFT_CENTER) {       
+          if (rotation.z <= 0){
+              this.mode = this.MODE_PREPARE_LEFT;
+              rotationTmp.z = 0;
+              rotationTmp.y = 0;
+              rotationTmp.x = 0;
+          } else {
+            rotationTmp.z = rotation.z - inc;            
+          }
+          el.setAttribute('rotation', rotationTmp);
+        } else if (this.mode == this.MODE_GUARD_RIGHT_CENTER) {       
+          if (rotation.z>=0){
+              this.mode = this.MODE_PREPARE_RIGHT;
+              rotationTmp.z = 0;
+              rotationTmp.y = 0;
+              rotationTmp.x = 0;
+          } else {
+            rotationTmp.z = rotation.z + inc;            
+          }
+          el.setAttribute('rotation', rotationTmp);
+        }
       }
 });

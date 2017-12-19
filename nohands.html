@@ -8,13 +8,15 @@
     <body>
       <a-scene>
             <a-assets>
-                <a-asset-item id="ls-hilt-dae" src="model/lightsaber.dae"></a-asset-item>                
+                <!--a-asset-item id="ls-hilt-dae" src="model/lightsaber.dae"></a-asset-item-->                
             </a-assets>
+
 
             <a-entity id="camera" camera look-controls wasd-controls position="0 1.6 0">
             </a-entity>
 
-            <a-entity id="floatingLsContainer" floating-lightsaber="color: red; target: #camera" position="0 1.5 -1"></a-entity>
+
+            <a-entity id="floatingLsContainer" floating-lightsaber="color: red; speed: 0.25; target: #camera" position="0 1.5 -1"></a-entity>
 
 
             <!--a-entity position="0 2 -1" rotation="0 0 0">              
@@ -23,7 +25,7 @@
             </a-entity-->
 
 
-            <a-entity id="tmpls" collada-model="#ls-hilt-dae" position="1 1.5 -1" scale="0.1 0.1 0.1"></a-entity>
+            <!--a-entity id="tmpls" collada-model="#ls-hilt-dae" position="1 1.5 -1" scale="0.1 0.1 0.1"></a-entity-->
 
 
             
