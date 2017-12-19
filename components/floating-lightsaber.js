@@ -24,7 +24,7 @@ AFRAME.registerComponent('floating-lightsaber', {
         this.positionVec3 = new THREE.Vector3();
         this.scaleVec3 = new THREE.Vector3();
 
-
+        // Blade
         var entity = document.createElement('a-entity');
         entity.id = "floating-lightsaber-blade";
         entity.setAttribute('geometry', {
@@ -33,41 +33,21 @@ AFRAME.registerComponent('floating-lightsaber', {
             height: 1.2
         });        
         entity.setAttribute('material', 'color', this.data.color);
-        
-        
-        this.positionVec3.x = 0;
-        this.positionVec3.y = 0.6;
-        this.positionVec3.z = 0;
-        
-        entity.setAttribute('position', this.positionVec3);
-
+        entity.setAttribute('position', '0 0.6 0');
+      
         this.el.appendChild(entity);
         this.lightsaberBlade = entity;
 
-/*
+        // Hilt
         var entity = document.createElement('a-entity');
         entity.id = "floating-lightsaber-hilt";
-        entity.setAttribute('collada-model', '#ls-hilt-dae');
+        entity.setAttribute('obj-model', 'obj: #ls-hilt-obj; mtl: #ls-hilt-mtl');
+        entity.setAttribute('scale', '0.16 0.16 0.16');
+        entity.setAttribute('position', '-0.023 -0.1 0');
+        entity.setAttribute('rotation', '0 0 -90');
         
-        this.scaleVec3.x = 0.1
-        this.scaleVec3.y = 0.1
-        this.scaleVec3.z = 0.1
-
-        entity.setAttribute('scale', this.positionVec3);
-        
-        
-        
-        this.positionVec3.x = 0;
-        this.positionVec3.y = 0;
-        this.positionVec3.z = 0;
-        
-        entity.setAttribute('position', this.positionVec3);
-
         this.el.appendChild(entity);
         this.lightsaberHilt = entity;
-*/
-
-
         
     },
 
