@@ -5,7 +5,7 @@ AFRAME.registerComponent('floating-lightsaber', {
         target: {type: 'selector'}
       },
 
-    init: function() {    
+    init: function() {            
         this.MODE_PREPARE_RIGHT = 0;
         this.MODE_SWING_RIGHT_LEFT = 1;
         this.MODE_GUARD_LEFT_CENTER = 2;
@@ -13,19 +13,25 @@ AFRAME.registerComponent('floating-lightsaber', {
         this.MODE_SWING_LEFT_RIGHT = 4;
         this.MODE_GUARD_RIGHT_CENTER = 5;
 
+        this.isHit = false;
+
         this.mode = this.MODE_PREPARE_RIGHT;
-
-        
-        
-
 
 
         this.directionVec3 = new THREE.Vector3();
         this.positionVec3 = new THREE.Vector3();
         this.scaleVec3 = new THREE.Vector3();
 
-        // Blade
+        //Hit light
         var entity = document.createElement('a-entity');
+        this.hitLight = entity;
+        this.hitLight.setAttribute('light', 'type: ambient; color: red; intensity: 0'); 
+        this.el.appendChild(entity);
+        
+
+
+        // Blade
+        entity = document.createElement('a-entity');
         entity.id = "floating-lightsaber-blade";
         entity.setAttribute('geometry', {
             primitive: 'cylinder',
@@ -38,6 +44,16 @@ AFRAME.registerComponent('floating-lightsaber', {
         this.el.appendChild(entity);
         this.lightsaberBlade = entity;
 
+        var self = this;
+        this.lightsaberBlade.addEventListener('hitstart', function (event) {          
+          self.hitStart();          
+        });
+
+        this.lightsaberBlade.addEventListener('hitend', function (event) {          
+          self.hitEnds();          
+        });
+
+
         // Hilt
         var entity = document.createElement('a-entity');
         entity.id = "floating-lightsaber-hilt";
@@ -48,7 +64,6 @@ AFRAME.registerComponent('floating-lightsaber', {
         
         this.el.appendChild(entity);
         this.lightsaberHilt = entity;
-        
     },
 
 
@@ -72,7 +87,8 @@ AFRAME.registerComponent('floating-lightsaber', {
         // Translate the entity in the direction towards the target.
         this.el.setAttribute('position', {
           x: currentPosition.x + directionVec3.x,
-          y: currentPosition.y + directionVec3.y,
+          // Do not change height
+          y: currentPosition.y,// + directionVec3.y,
           z: currentPosition.z + directionVec3.z
         });
       },
@@ -137,5 +153,21 @@ AFRAME.registerComponent('floating-lightsaber', {
           }
           el.setAttribute('rotation', rotationTmp);
         }
+
+      },
+
+      hitStart: function () {          
+        if (!this.isHit){
+          this.isHit = true;
+          this.hitLight.setAttribute('light', 'type: ambient; color: red; intensity: 1'); 
+        }
+
+      },
+      hitEnds: function () {          
+        if (this.isHit){
+          this.isHit = false;
+          this.hitLight.setAttribute('light', 'type: ambient; color: red; intensity: 0'); 
+        }
+
       }
 });
