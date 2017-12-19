@@ -12,6 +12,8 @@ AFRAME.registerComponent('floating-lightsaber', {
         this.MODE_PREPARE_LEFT = 3;
         this.MODE_SWING_LEFT_RIGHT = 4;
         this.MODE_GUARD_RIGHT_CENTER = 5;
+        this.MODE_RETURN_RIGHT = 6;
+        this.MODE_RETURN_LEFT = 7;
 
         this.isHit = false;
         this.enabled = false;
@@ -158,7 +160,11 @@ AFRAME.registerComponent('floating-lightsaber', {
           }
         } else if (this.mode == this.MODE_GUARD_LEFT_CENTER) {       
           if (rotation.z <= 0){
-              this.mode = this.MODE_PREPARE_LEFT;
+              if (Math.random() >= 0.5){
+                this.mode = this.MODE_PREPARE_RIGHT;
+              } else {
+                this.mode = this.MODE_PREPARE_LEFT;
+              }
               rotationTmp.z = 0;
               rotationTmp.y = 0;
               rotationTmp.x = 0;
@@ -168,12 +174,36 @@ AFRAME.registerComponent('floating-lightsaber', {
           el.setAttribute('rotation', rotationTmp);
         } else if (this.mode == this.MODE_GUARD_RIGHT_CENTER) {       
           if (rotation.z>=0){
-              this.mode = this.MODE_PREPARE_RIGHT;
+              if (Math.random() >= 0.5){
+                this.mode = this.MODE_PREPARE_RIGHT;
+              } else {
+                this.mode = this.MODE_PREPARE_LEFT;
+              }
               rotationTmp.z = 0;
               rotationTmp.y = 0;
               rotationTmp.x = 0;
           } else {
             rotationTmp.z = rotation.z + inc;            
+          }
+          el.setAttribute('rotation', rotationTmp);
+        } else if (this.mode == this.MODE_RETURN_RIGHT) {                
+          if (rotation.y<=0){
+              this.mode = this.MODE_GUARD_RIGHT_CENTER;
+              rotationTmp.y = -180;    
+              rotationTmp.z = -90;    
+              rotationTmp.x = 0;
+          } else {
+            rotationTmp.y = rotation.y - inc;            
+          }
+          el.setAttribute('rotation', rotationTmp);
+        } else if (this.mode == this.MODE_RETURN_LEFT) {                
+          if (rotation.y>=0){
+              this.mode = this.MODE_GUARD_LEFT_CENTER;
+              rotationTmp.y = 180;    
+              rotationTmp.z = 90;    
+              rotationTmp.x = 0;
+          } else {
+            rotationTmp.y = rotation.y + inc;            
           }
           el.setAttribute('rotation', rotationTmp);
         }
@@ -184,6 +214,12 @@ AFRAME.registerComponent('floating-lightsaber', {
         if (!this.isHit){
           this.isHit = true;
           this.hitLight.setAttribute('light', 'type: ambient; color: red; intensity: 1'); 
+
+          if (this.mode == this.MODE_SWING_RIGHT_LEFT){
+            this.mode = this.MODE_RETURN_RIGHT;
+          } else if (this.mode == this.MODE_SWING_LEFT_RIGHT){
+            this.mode = this.MODE_RETURN_LEFT;
+          }
         }
 
       },
