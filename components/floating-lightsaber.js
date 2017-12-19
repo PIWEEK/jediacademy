@@ -5,18 +5,54 @@ AFRAME.registerComponent('floating-lightsaber', {
       },
 
     init: function() {    
+        this.directionVec3 = new THREE.Vector3();
+        this.positionVec3 = new THREE.Vector3();
+        this.scaleVec3 = new THREE.Vector3();
+
+
         var entity = document.createElement('a-entity');
-        entity.id = "floating-lightsaber";
+        entity.id = "floating-lightsaber-blade";
         entity.setAttribute('geometry', {
             primitive: 'cylinder',
             radius: 0.01,
-            height: 0.8
+            height: 1.2
         });        
         entity.setAttribute('material', 'color', this.data.color);
         
+        
+        this.positionVec3.x = 0;
+        this.positionVec3.y = 0.6;
+        this.positionVec3.z = 0;
+        
+        entity.setAttribute('position', this.positionVec3);
+
         this.el.appendChild(entity);
-        this.lightsaber = entity;
-        this.directionVec3 = new THREE.Vector3();
+        this.lightsaberBlade = entity;
+
+
+        var entity = document.createElement('a-entity');
+        entity.id = "floating-lightsaber-hilt";
+        entity.setAttribute('collada-model', '#ls-hilt-dae');   
+        
+        this.scaleVec3.x = 0.1
+        this.scaleVec3.y = 0.1
+        this.scaleVec3.z = 0.1
+
+        entity.setAttribute('scale', this.positionVec3);
+        
+        
+        
+        this.positionVec3.x = 0;
+        this.positionVec3.y = 0;
+        this.positionVec3.z = 0;
+        
+        entity.setAttribute('position', this.positionVec3);
+
+        this.el.appendChild(entity);
+        this.lightsaberHilt = entity;
+
+
+
         
     },
 
@@ -47,24 +83,16 @@ AFRAME.registerComponent('floating-lightsaber', {
       },
 
       tick: function (time, timeDelta) {
-        var el = this.lightsaber;
+        var el = this.el;
         var rotationTmp = this.rotationTmp = this.rotationTmp || {x: 0, y: 0, z: 0};
         var rotation = el.getAttribute('rotation');
 
-        if (rotation.z<45) {
-            rotationTmp.z = rotation.z + 1;
-            //rotationTmp.y = rotation.y + 0.1;
-            //rotationTmp.z = rotation.z + 0.1;
-            el.setAttribute('rotation', rotationTmp);
-
-
-            var positionTmp = this.positionTmp = this.positionTmp || {x: 0, y: 0, z: 0};
-            var position = el.getAttribute('position');
-            positionTmp.x = position.x - 0.004;
-            positionTmp.y = position.y;
-            positionTmp.z = position.z;
-            el.setAttribute('position', positionTmp);
-        }
+        
+        rotationTmp.z = rotation.z + 2;
+        //rotationTmp.y = rotation.y + 0.1;
+        //rotationTmp.z = rotation.z + 0.1;
+        el.setAttribute('rotation', rotationTmp);
+        
 
       }
 });
