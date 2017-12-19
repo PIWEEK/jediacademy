@@ -14,6 +14,7 @@ AFRAME.registerComponent('floating-lightsaber', {
         this.MODE_GUARD_RIGHT_CENTER = 5;
 
         this.isHit = false;
+        this.enabled = false;
 
         this.mode = this.MODE_PREPARE_RIGHT;
 
@@ -40,18 +41,12 @@ AFRAME.registerComponent('floating-lightsaber', {
         });        
         entity.setAttribute('material', 'color', this.data.color);
         entity.setAttribute('position', '0 0.6 0');
+        entity.classList.add('collideable');
       
         this.el.appendChild(entity);
         this.lightsaberBlade = entity;
 
-        var self = this;
-        this.lightsaberBlade.addEventListener('hitstart', function (event) {          
-          self.hitStart();          
-        });
-
-        this.lightsaberBlade.addEventListener('hitend', function (event) {          
-          self.hitEnds();          
-        });
+        
 
 
         // Hilt
@@ -64,6 +59,37 @@ AFRAME.registerComponent('floating-lightsaber', {
         
         this.el.appendChild(entity);
         this.lightsaberHilt = entity;
+
+
+        var self = this;
+        this.lightsaberBlade.addEventListener('hitstart', function (event) {          
+          self.hitStart();          
+        });
+
+        this.lightsaberBlade.addEventListener('hitend', function (event) {          
+          self.hitEnds();          
+        });
+
+        this.el.addEventListener('enable', function (event) {          
+          self.enabled = true;
+          self.el.setAttribute('position', '0 1.5 -20');
+        });
+
+        this.el.addEventListener('disable', function (event) {          
+          self.enabled = false;
+          self.el.setAttribute('position', '0 -100 -20');
+        });
+
+
+
+    },
+
+    tick: function (time, timeDelta) {
+      if (this.enabled) {
+        this.follow(time, timeDelta);
+        this.fight(time, timeDelta);
+      }
+
     },
 
 
@@ -93,10 +119,8 @@ AFRAME.registerComponent('floating-lightsaber', {
         });
       },
 
-      tick: function (time, timeDelta) {
-        this.follow(time, timeDelta);
-
-
+      
+      fight: function (time, timeDelta) {
         var el = this.el;
         var rotationTmp = this.rotationTmp = this.rotationTmp || {x: 0, y: 0, z: 0};
         var rotation = el.getAttribute('rotation');
