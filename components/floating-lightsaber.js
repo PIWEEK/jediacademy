@@ -18,6 +18,9 @@ AFRAME.registerComponent('floating-lightsaber', {
         this.isHit = false;
         this.enabled = false;
 
+        this.numSwings = 0;
+        this.numHits = 0;
+
         this.mode = this.MODE_PREPARE_RIGHT;
 
 
@@ -74,7 +77,10 @@ AFRAME.registerComponent('floating-lightsaber', {
 
         this.el.addEventListener('enable', function (event) {          
           self.enabled = true;
+          self.numSwings = 0;
+          self.numHits = 0;
           self.el.setAttribute('position', '0 1.5 -20');
+          self.el.setAttribute('visible', true);
         });
 
         this.el.addEventListener('disable', function (event) {          
@@ -147,6 +153,7 @@ AFRAME.registerComponent('floating-lightsaber', {
         } else if (this.mode == this.MODE_SWING_RIGHT_LEFT) {                
           if (rotation.y>=180){
               this.mode = this.MODE_GUARD_LEFT_CENTER;
+              this.addSwing();
           } else {
             rotationTmp.y = rotation.y + inc;
             el.setAttribute('rotation', rotationTmp);
@@ -154,6 +161,7 @@ AFRAME.registerComponent('floating-lightsaber', {
         } else if (this.mode == this.MODE_SWING_LEFT_RIGHT) {                
           if (rotation.y<=-180){
               this.mode = this.MODE_GUARD_RIGHT_CENTER;
+              this.addSwing();
           } else {
             rotationTmp.y = rotation.y - inc;
             el.setAttribute('rotation', rotationTmp);
@@ -212,7 +220,7 @@ AFRAME.registerComponent('floating-lightsaber', {
 
       hitStart: function () {          
         if (!this.isHit){
-          this.isHit = true;
+          this.isHit = true;          
           this.hitLight.setAttribute('light', 'type: ambient; color: red; intensity: 1'); 
 
           if (this.mode == this.MODE_SWING_RIGHT_LEFT){
@@ -220,6 +228,8 @@ AFRAME.registerComponent('floating-lightsaber', {
           } else if (this.mode == this.MODE_SWING_LEFT_RIGHT){
             this.mode = this.MODE_RETURN_LEFT;
           }
+          this.numHits += 1;
+          this.addSwing();
         }
 
       },
@@ -229,5 +239,17 @@ AFRAME.registerComponent('floating-lightsaber', {
           this.hitLight.setAttribute('light', 'type: ambient; color: red; intensity: 0'); 
         }
 
+      },
+
+      addSwing: function() {
+        this.numSwings += 1;
+        if (this.numSwings >= 3) {
+          this.enabled = false;
+          this.el.setAttribute('visible', false);
+          this.finalText = "TRAINING END\n\nSwings: " + (this.numSwings -1)+ "\nHits: " + this.numHits;
+
+          document.querySelector("#jediacademy").emit("endminigame", {text: this.finalText, color: "red"});
+
+        }
       }
 });

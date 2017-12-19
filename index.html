@@ -8,31 +8,41 @@
 
       <script src="components/floating-lightsaber.js"></script>
       <script src="components/menuselector.js"></script>
+      <script src="components/hud.js"></script>
 
       <script src="components/jediacademy.js"></script>
     </head>
     <body>
-      <a-scene jediacademy>
+      <a-scene id ="jediacademy" jediacademy>
             <a-assets>   
                 <a-asset-item id="ls-hilt-obj" src="model/lightsaber.obj"></a-asset-item>
                 <a-asset-item id="ls-hilt-mtl" src="model/lightsaber.mtl"></a-asset-item>   
                 
-                <img id="yoda" src="img/yoda.png" crossorigin="anonymous" />
+                <img id="yoda-img" src="img/yoda.png" crossorigin="anonymous" />
+                <img id="training-robot-img" src="img/training_robot.jpg" crossorigin="anonymous" />                
             </a-assets>
             
             <!-- ENEMIES / minigames -->
             <a-entity id="floatingLsGame" floating-lightsaber="color: red; speed: 0.25; target: #camera" position="0 -100 -20"></a-entity>
 
+            
+
 
             <!-- MENU -->
-            <a-entity id="menuFloatingLs" menu-selector="photo: #yoda; minigame: #floatingLsGame" position="0 1.5 -2"></a-entity>
+            <a-entity id="menuFloatingLs" menu-selector="photo: #yoda-img; minigame: #floatingLsGame" position="0 1.5 -2"></a-entity>
+
+            <a-entity id="menuTrainingRobot" menu-selector="photo: #training-robot-img; minigame: #floatingLsGame" position="3 1.5 -1" rotation="0 -45 0"></a-entity>
 
             <!--a-plane color="#CCC" height="1" width="1" position="0 1.5 -2"></a-plane-->
+
+            
 
 
             <a-entity id="camera" camera look-controls wasd-controls position="0 1.6 0">
                 <a-entity id="player-body" geometry="primitive: box; height: 1.6; width: 0.2; depth:0.2" position="0 -0.6 0"
                 material="opacity: 1" aabb-collider="objects: .collideable"></a-entity>
+
+                <a-entity id="hud" hud position="0.25 0 -0.5"></a-entity>
             </a-entity>            
             
             <a-entity environment="preset: yavapai; numDressing: 500"></a-entity>

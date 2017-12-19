@@ -7,32 +7,52 @@ AFRAME.registerComponent('menu-selector', {
 
     init: function () {
         this.isHit = false;
-
-
-        
-
-
         var entity = document.createElement('a-entity');
 
         entity.setAttribute('geometry', {
-            primitive: 'plane',
+            primitive: 'box',
             height: 1,
-            width: 1
+            width: 1,
+            depth: 0.2
         });        
         entity.setAttribute('material', 'src', this.data.photo);
         entity.setAttribute('position', '0 0.5 0');
         entity.classList.add('collideable');
+        entity.classList.add('menuitem');
       
         this.el.appendChild(entity);     
         
         var self = this;
         this.el.addEventListener('hitstart', function (event) {          
             self.hitStart();          
-          });
+        });
+        this.el.addEventListener('enable', function (event) {          
+            self.showItem();          
+        });
+        this.el.addEventListener('disable', function (event) {          
+            self.hideItem();          
+        });
+
+        this.enabled = true;
     },
 
     hitStart: function() {
-        this.el.setAttribute('position', '0 -100 0');
-        this.data.minigame.emit('enable');
+        if (this.enabled) {
+            this.enabled = false;
+            this.el.setAttribute('visible', false);
+            document.querySelector("#jediacademy").emit("startminigame", {minigame:this.data.minigame})
+        }
+    },
+
+    showItem: function() {
+        this.enabled = true;
+        this.el.setAttribute('visible', true);
+
+    },
+
+    hideItem: function() {
+        this.enabled = false;
+        this.el.setAttribute('visible', false);
+
     }
   });
