@@ -103,7 +103,7 @@ AFRAME.registerComponent('destroy-mini-robots', {
         var currentPosition = this.el.object3D.position;
 
         // Subtract the vectors to get the direction the entity should head in.
-        directionVec3.copy(self.targetPosition).sub(currentPosition);
+        directionVec3.copy(this.targetPosition).sub(currentPosition);
         // Calculate the distance.
         var distance = directionVec3.length();
         // Scale the direction vector's magnitude down to match the speed.
