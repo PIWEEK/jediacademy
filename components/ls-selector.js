@@ -1,8 +1,8 @@
-AFRAME.registerComponent('menu-selector', {
+AFRAME.registerComponent('ls-selector', {
 
     schema: {
         photo: {type: 'selector'},
-        minigame: {type: 'selector'},
+        lightsaber: {type: 'number'},
       },
 
     init: function () {
@@ -11,22 +11,22 @@ AFRAME.registerComponent('menu-selector', {
 
         entity.setAttribute('geometry', {
             primitive: 'box',
-            height: 1,
-            width: 1,
-            depth: 0.2
+            height: 0.512,
+            width: 0.384,
+            depth: 0.05
         });
         entity.setAttribute('material', 'src', this.data.photo);
         entity.setAttribute('position', '0 0.5 0');
-        entity.classList.add('collideable');
-        entity.classList.add('menuitem');
+        entity.classList.add('ls-selector-collideable');
+        entity.classList.add('ls-selector-menuitem');
 
         this.el.appendChild(entity);
 
         var self = this;
-        this.el.addEventListener('hitstart', function (event) {
+        entity.addEventListener('hitstart', function (event) {
             self.hitStart();
         });
-        this.el.addEventListener('enable', function (event) {
+        entity.addEventListener('enable', function (event) {
             self.showItem();
         });
         this.el.addEventListener('disable', function (event) {
@@ -34,13 +34,14 @@ AFRAME.registerComponent('menu-selector', {
         });
 
         this.hideItem();
+
     },
 
     hitStart: function() {
         if (this.enabled) {
             this.enabled = false;
             this.el.setAttribute('visible', false);
-            document.querySelector("#jediacademy").emit("startminigame", {minigame:this.data.minigame})
+            document.querySelector("#jediacademy").emit("choosels", {lightsaber:this.data.lightsaber})
         }
     },
 

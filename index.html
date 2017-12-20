@@ -12,6 +12,7 @@
       <script src="components/dual-lightsaber.js"></script>
       <script src="components/training-robot.js"></script>
       <script src="components/menuselector.js"></script>
+      <script src="components/ls-selector.js"></script>
       <script src="components/hud.js"></script>
 
       <script src="components/jediacademy.js"></script>
@@ -29,11 +30,36 @@
 
                 <img id="yoda-img" src="img/portada1.png" crossorigin="anonymous" />
                 <img id="training-robot-img" src="img/portada2.png" crossorigin="anonymous" />
+
+                <img id="single-ls-img" src="img/single-ls.png" crossorigin="anonymous" />
+                <img id="two-ls-img" src="img/two-ls.png" crossorigin="anonymous" />
+                <img id="dual-ls-img" src="img/dual-ls.png" crossorigin="anonymous" />
             </a-assets>
+
+
+            <!-- Player lightsabers -->
+            <a-entity id="single-lightsaber-blade-1" geometry="primitive: cylinder; radius: 0.01; height: 1.2;" aabb-collider="objects: .collideable"></a-entity>
+            <a-entity id="single-lightsaber-blade-2" geometry="primitive: cylinder; radius: 0.01; height: 1.2;" aabb-collider="objects: .collideable"></a-entity>
+            <a-entity id="dual-lightsaber-blade" geometry="primitive: cylinder; radius: 0.01; height: 2.2;" aabb-collider="objects: .collideable"></a-entity>
+
+            <a-entity id="leftHand" hand-controls="left" aabb-collider="objects: .ls-selector-collideable"></a-entity>
+            <a-entity id="rightHand" hand-controls="right" aabb-collider="objects: .ls-selector-collideable"></a-entity>
+
+            <a-entity id="player-single-ls-1" single-lightsaber="color:blue; target: #rightHand; blade: #single-lightsaber-blade-1; left: false" aabb-collider="objects: .collideable"></a-entity>
+            <a-entity id="player-single-ls-2" single-lightsaber="color:blue; target: #leftHand; blade: #single-lightsaber-blade-2; left: true" aabb-collider="objects: .collideable"></a-entity>
+            <a-entity id="player-dual-ls" dual-lightsaber="color:green; target: #rightHand" aabb-collider="objects: .collideable"></a-entity>
+
+
+            <!-- LS SELECTOR -->
+            <a-entity id="menuLsSingle" ls-selector="photo: #single-ls-img; lightsaber: 0" position="-0.5 1 -1.5"></a-entity>
+            <a-entity id="menuLsTwo" ls-selector="photo: #two-ls-img; lightsaber: 1" position="0 1 -1.5"></a-entity>
+            <a-entity id="menuLsDual" ls-selector="photo: #dual-ls-img; lightsaber: 2" position="0.5 1 -1.5"></a-entity>
+
 
             <!-- ENEMIES / minigames -->
             <a-entity id="floatingLsGame" floating-lightsaber="color: red; speed: 0.4; target: #camera" position="0 -100 -20"></a-entity>
             <a-entity id="trainingRobotGame" training-robot="speed: 0.5; target: #camera" position="0 -100 -20"></a-entity>
+
 
 
 
@@ -56,13 +82,7 @@
             </a-entity>
 
 
-            <a-entity id="leftHand" hand-controls="left"></a-entity>
-            <a-entity id="rightHand" hand-controls="right"></a-entity>
 
-
-            <a-entity id="playerLS" single-lightsaber="color:blue; target: #rightHand" aabb-collider="objects: .collideable"></a-entity>
-
-            <!--a-entity id="playerLS" dual-lightsaber="color:green; target: #rightHand" aabb-collider="objects: .collideable"></a-entity-->
 
 
             <a-entity environment="preset: yavapai; numDressing: 500"></a-entity>
@@ -70,8 +90,7 @@
 
             <!-- Preload -->
             <a-collada-model id="training-robot" src="#training-robot-dae" scale="0.5 0.5 0.5" visible="false" look-at="[camera]"></a-collada-model>
-            <a-entity id="single-lightsaber-blade" geometry="primitive: cylinder; radius: 0.01; height: 1.2;" aabb-collider="objects: .collideable"></a-entity>
-            <!--a-entity id="dual-lightsaber-blade" geometry="primitive: cylinder; radius: 0.01; height: 2.2;" aabb-collider="objects: .collideable"></a-entity-->
+
 
 
 

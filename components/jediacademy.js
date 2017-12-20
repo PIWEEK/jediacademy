@@ -8,23 +8,37 @@ AFRAME.registerComponent('jediacademy', {
       }
 
       var self = this;
-      this.el.addEventListener('showmenu', function (event) {          
+      this.el.addEventListener('showmenu', function (event) {
         self.showMenu()
       });
 
-      this.el.addEventListener('startminigame', function (event) {          
+      this.el.addEventListener('startminigame', function (event) {
         self.startMinigame(event.detail.minigame);
       });
 
-      this.el.addEventListener('endminigame', function (event) {          
+      this.el.addEventListener('endminigame', function (event) {
         self.endMinigame(event.detail.text, event.detail.color);
+      });
+
+      this.el.addEventListener('choosels', function (event) {
+        self.chooseLs(event.detail.lightsaber);
       });
 
 
 
     },
     run: function() {
-        console.log("Jediacademy is loaded!!");        
+        console.log("Jediacademy is loaded!!");
+        var self = this;
+        setTimeout(function(){ self.showLsSelection(); }, 3000);
+
+    },
+
+    showLsSelection: function() {
+      var lsItems = document.querySelectorAll(".ls-selector-menuitem");
+      for (var i = 0; i < lsItems.length; i++) {
+        lsItems[i].emit("enable");
+      }
     },
 
     showMenu: function() {
@@ -46,5 +60,26 @@ AFRAME.registerComponent('jediacademy', {
     endMinigame: function(text, color) {
       document.querySelector("#hud").emit("showtext", {text: text, color: color});
     },
+
+    chooseLs: function(lightsaber) {
+      var lsItems = document.querySelectorAll(".ls-selector-menuitem");
+      for (var i = 0; i < lsItems.length; i++) {
+        lsItems[i].emit("disable");
+      }
+
+      // Single LS
+      if (lightsaber == 0) {
+        document.querySelector("#player-single-ls-1").emit("enable");
+      } else if (lightsaber == 1) {
+        document.querySelector("#player-single-ls-1").emit("enable");
+        document.querySelector("#player-single-ls-2").emit("enable");
+      } else if (lightsaber == 2) {
+        document.querySelector("#player-dual-ls").emit("enable");
+      }
+
+      this.showMenu();
+
+
+    }
 
   });

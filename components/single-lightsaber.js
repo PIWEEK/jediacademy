@@ -1,12 +1,18 @@
 AFRAME.registerComponent('single-lightsaber', {
     schema: {
         color: {type: 'string'},
-        target: {type: 'selector'}
+        target: {type: 'selector'},
+        blade: {type: 'selector'},
+        left: {type: 'boolean'}
       },
 
     init: function() {
+        this.enabled = false;
+        this.el.setAttribute('visible', false);
+        this.el.setAttribute('position', '0 -100 0');
+
         // Blade
-        var entity = document.querySelector('#single-lightsaber-blade');
+        var entity = this.data.blade;
 
         entity.setAttribute('position', '0 0.6 0');
 
@@ -24,15 +30,32 @@ AFRAME.registerComponent('single-lightsaber', {
 
         this.el.appendChild(entity);
         this.lightsaberHilt = entity;
-        this.rotateQuat = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI / 2);
+        if (this.data.left) {
+          this.rotateQuat = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, -1), Math.PI / 2);
+        } else {
+          this.rotateQuat = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI / 2);
+        }
+
+
+
+
 
 
         var self = this;
         setTimeout(function(){ self.lightsaberBlade.setAttribute('material', 'color', self.data.color); }, 1000);
+
+        this.el.addEventListener('enable', function (event) {
+            self.enabled = true;
+            self.el.setAttribute('visible', true);
+        });
+
+
     },
 
     tick: function (time, timeDelta) {
-      this.follow()
+      if (this.enabled) {
+        this.follow();
+      }
     },
 
 
