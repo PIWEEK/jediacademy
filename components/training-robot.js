@@ -166,7 +166,7 @@ AFRAME.registerComponent('training-robot', {
 
         // Scale the direction vector's magnitude down to match the speed.
         var self = this;
-        this.factor = 10 / this.distance;
+        this.factor = (20 * this.data.speed) / this.distance;
         ['x', 'y', 'z'].forEach(function (axis) {
             self.directionVec3[axis] *= self.factor * (timeDelta / 1000);
         });
