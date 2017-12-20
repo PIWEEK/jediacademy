@@ -72,7 +72,8 @@ AFRAME.registerComponent('destroy-mini-robots', {
 
           self.numRobots = 10;
           self.el.setAttribute('position', '0 0 -20');
-          self.targetPosition = self.data.target.object3D.position;
+          self.targetPosition = new THREE.Vector3()
+          self.targetPosition.copy(self.data.target.object3D.position);
         });
 
         this.el.addEventListener('disable', function (event) {
