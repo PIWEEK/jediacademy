@@ -1,25 +1,24 @@
-AFRAME.registerComponent('single-lightsaber', {
+AFRAME.registerComponent('dual-lightsaber', {
     schema: {
         color: {type: 'string'},
         target: {type: 'selector'}
       },
 
     init: function() {
-        // Blade
-        var entity = document.querySelector('#single-lightsaber-blade');
+        // Blades
+        var entity = document.querySelector('#dual-lightsaber-blade');
 
-        entity.setAttribute('position', '0 0.6 0');
+        entity.setAttribute('position', '0 0 0');
 
         this.el.appendChild(entity);
         this.lightsaberBlade = entity;
 
-
         // Hilt
         var entity = document.createElement('a-entity');
-        entity.id = "single-lightsaber-hilt";
-        entity.setAttribute('obj-model', 'obj: #ls-hilt-obj; mtl: #ls-hilt-mtl');
+        entity.id = "dual-lightsaber-hilt";
+        entity.setAttribute('obj-model', 'obj: #ls-hilt-dual-obj; mtl: #ls-hilt-dual-mtl');
         entity.setAttribute('scale', '0.16 0.16 0.16');
-        entity.setAttribute('position', '-0.023 -0.1 0');
+        entity.setAttribute('position', '-0.023 0 0');
         entity.setAttribute('rotation', '0 0 -90');
 
         this.el.appendChild(entity);
