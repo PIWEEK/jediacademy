@@ -230,12 +230,18 @@ AFRAME.registerComponent('floating-lightsaber', {
 
       hitStart: function (entity) {
         if (!this.isHit){
-          this.isHit = true;
 
-          if (entity.id == "player-body") {
-            this.numHits += 1;
-            this.hitLight.setAttribute('light', 'type: ambient; color: red; intensity: 1');
-          }
+            var self = this;
+            document.querySelector("#player-body").components['aabb-collider']['intersectedEls'].some(function (el) {
+
+                if (el.id == 'floating-lightsaber-blade') {
+                    self.isHit = true;
+                    self.numHits += 1;
+                    self.hitLight.setAttribute('light', 'type: ambient; color: red; intensity: 1');
+
+                    return true;
+                }
+            });
 
 
           if (this.mode == this.MODE_SWING_RIGHT_LEFT){
@@ -251,9 +257,7 @@ AFRAME.registerComponent('floating-lightsaber', {
       hitEnds: function (entity) {
         if (this.isHit){
           this.isHit = false;
-          if (entity.id == "player-body") {
-            this.hitLight.setAttribute('light', 'type: ambient; color: red; intensity: 0');
-          }
+          this.hitLight.setAttribute('light', 'type: ambient; color: red; intensity: 0');
         }
 
       },
