@@ -11,9 +11,9 @@ AFRAME.registerComponent('menu-selector', {
 
         entity.setAttribute('geometry', {
             primitive: 'box',
-            height: 1,
-            width: 1,
-            depth: 0.2
+            height: 0.512,
+            width: 0.512,
+            depth: 0.05
         });
         entity.setAttribute('material', 'src', this.data.photo);
         entity.setAttribute('position', '0 0.5 0');

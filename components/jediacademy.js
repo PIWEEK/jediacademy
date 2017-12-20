@@ -30,7 +30,11 @@ AFRAME.registerComponent('jediacademy', {
     run: function() {
         console.log("Jediacademy is loaded!!");
         var self = this;
-        setTimeout(function(){ self.showLsSelection(); }, 3000);
+        setTimeout(function(){
+          self.showLsSelection();
+          //self.startMinigame(document.querySelector("#destroyMiniRobotsGame"));
+          //self.startMinigame(document.querySelector("#floatingLsGame"));
+        }, 3000);
 
     },
 

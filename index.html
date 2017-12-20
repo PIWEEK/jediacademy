@@ -11,6 +11,7 @@
       <script src="components/single-lightsaber.js"></script>
       <script src="components/dual-lightsaber.js"></script>
       <script src="components/training-robot.js"></script>
+      <script src="components/destroy-mini-robots.js"></script>
       <script src="components/menuselector.js"></script>
       <script src="components/ls-selector.js"></script>
       <script src="components/hud.js"></script>
@@ -28,8 +29,9 @@
 
                 <a-asset-item id="training-robot-dae" src="model/training-robot-2.dae"></a-asset-item>
 
-                <img id="yoda-img" src="img/portada1.png" crossorigin="anonymous" />
-                <img id="training-robot-img" src="img/portada2.png" crossorigin="anonymous" />
+                <img id="portada1-img" src="img/portada1.png" crossorigin="anonymous" />
+                <img id="portada2-img" src="img/portada2.png" crossorigin="anonymous" />
+                <img id="portada3-img" src="img/portada3.png" crossorigin="anonymous" />
 
                 <img id="single-ls-img" src="img/single-ls.png" crossorigin="anonymous" />
                 <img id="two-ls-img" src="img/two-ls.png" crossorigin="anonymous" />
@@ -59,15 +61,18 @@
             <!-- ENEMIES / minigames -->
             <a-entity id="floatingLsGame" floating-lightsaber="color: red; speed: 0.4; target: #camera" position="0 -100 -20"></a-entity>
             <a-entity id="trainingRobotGame" training-robot="speed: 0.5; target: #camera" position="0 -100 -20"></a-entity>
+            <a-entity id="destroyMiniRobotsGame" destroy-mini-robots="speed: 0; target: #camera" position="0 -100 -20"></a-entity>
 
 
 
 
 
             <!-- MENU -->
-            <a-entity id="menuFloatingLs" menu-selector="photo: #yoda-img; minigame: #floatingLsGame" position="0 1.5 -2"></a-entity>
+            <a-entity id="menuFloatingLs" menu-selector="photo: #portada1-img; minigame: #floatingLsGame" position="-0.7 1 -2"></a-entity>
 
-            <a-entity id="menuTrainingRobot" menu-selector="photo: #training-robot-img; minigame: #trainingRobotGame" position="3 1.5 -1" rotation="0 -45 0"></a-entity>
+            <a-entity id="menuTrainingRobot" menu-selector="photo: #portada2-img; minigame: #trainingRobotGame" position="0 1 -2"></a-entity>
+
+            <a-entity id="menuDestroyMiniRobots" menu-selector="photo: #portada3-img; minigame: #destroyMiniRobotsGame" position="0.7 1 -2"></a-entity>
 
             <!--a-plane color="#CCC" height="1" width="1" position="0 1.5 -2"></a-plane-->
 
@@ -91,6 +96,16 @@
             <!-- Preload -->
             <a-collada-model id="training-robot" src="#training-robot-dae" scale="0.5 0.5 0.5" visible="false" look-at="[camera]"></a-collada-model>
 
+            <!--a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model>
+            <a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model>
+            <a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model>
+            <a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model>
+            <a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model>
+            <a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model>
+            <a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model>
+            <a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model>
+            <a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model>
+            <a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model-->
 
 
 
