@@ -14,6 +14,7 @@
       <script src="components/destroy-mini-robots.js"></script>
       <script src="components/menuselector.js"></script>
       <script src="components/ls-selector.js"></script>
+      <script src="components/forcehand.js"></script>
       <script src="components/hud.js"></script>
 
       <script src="components/jediacademy.js"></script>
@@ -40,11 +41,11 @@
 
 
             <!-- Player lightsabers -->
-            <a-entity id="single-lightsaber-blade-1" geometry="primitive: cylinder; radius: 0.01; height: 1.2;" aabb-collider="objects: .collideable"></a-entity>
-            <a-entity id="single-lightsaber-blade-2" geometry="primitive: cylinder; radius: 0.01; height: 1.2;" aabb-collider="objects: .collideable"></a-entity>
-            <a-entity id="dual-lightsaber-blade" geometry="primitive: cylinder; radius: 0.01; height: 2.2;" aabb-collider="objects: .collideable"></a-entity>
+            <a-entity id="single-lightsaber-blade-1" position="0 -100 -20" geometry="primitive: cylinder; radius: 0.01; height: 1.2;" aabb-collider="objects: .collideable"></a-entity>
+            <a-entity id="single-lightsaber-blade-2" position="0 -100 -20" geometry="primitive: cylinder; radius: 0.01; height: 1.2;" aabb-collider="objects: .collideable"></a-entity>
+            <a-entity id="dual-lightsaber-blade" position="0 -100 -20" geometry="primitive: cylinder; radius: 0.01; height: 2.2;" aabb-collider="objects: .collideable"></a-entity>
 
-            <a-entity id="leftHand" hand-controls="left" aabb-collider="objects: .ls-selector-collideable"></a-entity>
+            <a-entity id="leftHand" hand-controls="left" forcehand aabb-collider="objects: .ls-selector-collideable"></a-entity>
             <a-entity id="rightHand" hand-controls="right" aabb-collider="objects: .ls-selector-collideable"></a-entity>
 
             <a-entity id="player-single-ls-1" single-lightsaber="color:blue; target: #rightHand; blade: #single-lightsaber-blade-1; left: false" aabb-collider="objects: .collideable"></a-entity>
@@ -95,17 +96,6 @@
 
             <!-- Preload -->
             <a-collada-model id="training-robot" src="#training-robot-dae" scale="0.5 0.5 0.5" visible="false" look-at="[camera]"></a-collada-model>
-
-            <!--a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model>
-            <a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model>
-            <a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model>
-            <a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model>
-            <a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model>
-            <a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model>
-            <a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model>
-            <a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model>
-            <a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model>
-            <a-collada-model class="exploding-robot" src="#training-robot-dae" scale="0.001 0.001 0.001" visible="false" look-at="[camera]"></a-collada-model-->
 
 
 

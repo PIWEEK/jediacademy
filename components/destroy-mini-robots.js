@@ -132,9 +132,6 @@ AFRAME.registerComponent('destroy-mini-robots', {
       },
 
       hitStart: function (robot) {
-        console.log("HIT");
-        console.log(robot);
-
         if (this.enabled) {
             robot.setAttribute('visible', false);
             robot.setAttribute('position', '0 -100 0');
