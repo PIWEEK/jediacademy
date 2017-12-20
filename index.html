@@ -27,7 +27,7 @@
             </a-assets>
 
             <!-- ENEMIES / minigames -->
-            <a-entity id="floatingLsGame" floating-lightsaber="color: red; speed: 0.25; target: #camera" position="0 -100 -20"></a-entity>
+            <a-entity id="floatingLsGame" floating-lightsaber="color: red; speed: 0.4; target: #camera" position="0 -100 -20"></a-entity>
             <a-entity id="trainingRobotGame" training-robot="speed: 0.5; target: #camera" position="0 -100 -20"></a-entity>
 
 
@@ -55,7 +55,7 @@
             <a-entity id="rightHand" hand-controls="right"></a-entity>
 
 
-            <a-entity id="playerLS" single-lightsaber="color:blue; target: #rightHand"></a-entity>
+            <a-entity id="playerLS" single-lightsaber="color:blue; target: #rightHand" aabb-collider="objects: .collideable"></a-entity>
 
 
             <a-entity environment="preset: yavapai; numDressing: 500"></a-entity>
@@ -63,6 +63,11 @@
 
             <!-- Preload -->
             <a-collada-model id="training-robot" src="#training-robot-dae" scale="0.5 0.5 0.5" visible="false"></a-collada-model>
+            <a-entity id="single-lightsaber-blade" geometry="primitive: cylinder; radius: 0.01; height: 1.2;" color="blue" aabb-collider="objects: .collideable"></a-entity>
+
+
+
+
       </a-scene>
     </body>
   </html>

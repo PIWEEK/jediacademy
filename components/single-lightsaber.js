@@ -6,16 +6,9 @@ AFRAME.registerComponent('single-lightsaber', {
 
     init: function() {
         // Blade
-        entity = document.createElement('a-entity');
-        entity.id = "floating-lightsaber-blade";
-        entity.setAttribute('geometry', {
-            primitive: 'cylinder',
-            radius: 0.01,
-            height: 1.2
-        });
-        entity.setAttribute('material', 'color', this.data.color);
+        var entity = document.querySelector('#single-lightsaber-blade');
+
         entity.setAttribute('position', '0 0.6 0');
-        entity.classList.add('collideable');
 
         this.el.appendChild(entity);
         this.lightsaberBlade = entity;
@@ -32,6 +25,10 @@ AFRAME.registerComponent('single-lightsaber', {
         this.el.appendChild(entity);
         this.lightsaberHilt = entity;
         this.rotateQuat = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI / 2);
+
+
+        var self = this;
+        setTimeout(function(){ self.lightsaberBlade.setAttribute('material', 'color', self.data.color); }, 1000);
     },
 
     tick: function (time, timeDelta) {
