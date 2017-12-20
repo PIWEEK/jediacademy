@@ -9,8 +9,17 @@ AFRAME.registerComponent('training-robot', {
         this.MODE_HOVER = 0;
         this.MODE_SHOOT = 1;
 
-        this.WEAPON_UP_LEFT = '0 1 0';
-        this.WEAPON_DOWN_RIGHT = '0 -1 0';
+        this.WEAPON_UP_LEFT = '-1 0.2 1';
+        this.WEAPON_UP_RIGHT = '0 0.2 1';
+        this.WEAPON_DOWN_RIGHT = '0 -0.3 1';
+        this.WEAPON_DOWN_LEFT = '-1 -0.3 1';
+
+        this.WEAPONS = {
+            0: this.WEAPON_UP_LEFT,
+            1: this.WEAPON_UP_RIGHT,
+            2: this.WEAPON_DOWN_LEFT,
+            3: this.WEAPON_DOWN_RIGHT
+        }
 
         this.isHit = false;
         this.enabled = false;
@@ -20,6 +29,7 @@ AFRAME.registerComponent('training-robot', {
 
         this.mode = this.MODE_HOVER;
         this.activeWeapon = this.WEAPON_UP_LEFT;
+        this.nextWeapon = 0;
 
         this.directionVec3 = new THREE.Vector3();
         this.targetWorldPosition = new THREE.Vector3();
@@ -52,6 +62,7 @@ AFRAME.registerComponent('training-robot', {
         });
         entity.setAttribute('material', 'color', this.data.color);
         entity.setAttribute('position', this.activeWeapon);
+        entity.setAttribute('visible', false);
         entity.classList.add('collideable');
 
         this.el.appendChild(entity);
@@ -135,13 +146,14 @@ AFRAME.registerComponent('training-robot', {
                 z: this.robotPosition.z + this.directionVec3.z
             });
         } else if (this.mode == this.MODE_HOVER) {
-            this.addShot();
+            this.recharge();
         }
     },
 
 
     fight: function (time, timeDelta) {
 
+        this.lightProjectile.setAttribute('visible', true);
         this.currentLocalPosition = this.lightProjectile.object3D.position;
 
         // Grab global position vectors (THREE.Vector3) from the entities' three.js objects.
@@ -181,7 +193,7 @@ AFRAME.registerComponent('training-robot', {
         if (!this.isHit) {
             var self = this;
             document.querySelector("#player-body").components['aabb-collider']['intersectedEls'].some(function (el) {
-                console.log(el.id);
+
                 if (el.id == 'light-projectile') {
                     self.isHit = true;
                     self.numHits += 1;
@@ -194,8 +206,6 @@ AFRAME.registerComponent('training-robot', {
             this.addShot();
         }
 
-        // this.hitEnds(entity);
-
     },
     hitEnds: function (entity) {
         if (this.isHit) {
@@ -206,28 +216,24 @@ AFRAME.registerComponent('training-robot', {
     },
 
     addShot: function () {
-        this.shoot();
         this.numShots += 1;
 
-        if (this.numShots >= 4) {
+        if (this.numShots >= 3) {
             this.enabled = false;
             this.el.setAttribute('visible', false);
-            this.finalText = "TRAINING END\n\nShots: " + (this.numShots - 1) + "\nHits: " + this.numHits;
+            this.finalText = "TRAINING END\n\nShots: " + this.numShots + "\nHits: " + this.numHits;
 
             document.querySelector("#jediacademy").emit("endminigame", {text: this.finalText, color: "red"});
-
+        } else {
+            this.recharge();
         }
     },
 
-    shoot: function () {
-        if (this.activeWeapon == this.WEAPON_UP_LEFT) {
-            this.activeWeapon = this.WEAPON_DOWN_RIGHT;
-        } else if (this.activeWeapon == this.WEAPON_DOWN_RIGHT) {
-            this.activeWeapon = this.WEAPON_UP_LEFT;
-        }
+    recharge: function () {
+        this.nextWeapon = Math.floor((Math.random() * 4) + 1);
+        this.activeWeapon = this.WEAPONS[this.nextWeapon];
 
         this.lightProjectile.setAttribute('position', this.activeWeapon);
-        this.lightProjectile.setAttribute('visible', true);
         this.mode = this.MODE_SHOOT;
 
         this.targetWorldPosition.setFromMatrixPosition(this.data.target.object3D.matrixWorld);
