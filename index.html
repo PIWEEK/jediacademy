@@ -5,6 +5,7 @@
 
 
       <script src="https://unpkg.com/aframe-aabb-collider-component/dist/aframe-aabb-collider-component.min.js"></script>
+      <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
 
       <script src="components/floating-lightsaber.js"></script>
       <script src="components/single-lightsaber.js"></script>
@@ -62,7 +63,7 @@
 
 
             <!-- Preload -->
-            <a-collada-model id="training-robot" src="#training-robot-dae" scale="0.5 0.5 0.5" visible="false"></a-collada-model>
+            <a-collada-model id="training-robot" src="#training-robot-dae" scale="0.5 0.5 0.5" visible="false" look-at="[camera]"></a-collada-model>
             <a-entity id="single-lightsaber-blade" geometry="primitive: cylinder; radius: 0.01; height: 1.2;" color="blue" aabb-collider="objects: .collideable"></a-entity>
 
 
