@@ -34,6 +34,8 @@ AFRAME.registerComponent('training-robot', {
         this.directionVec3 = new THREE.Vector3();
         this.targetWorldPosition = new THREE.Vector3();
         this.currentWorldPosition = new THREE.Vector3();
+        this.currentLocalPosition = this.el.object3D.position;
+        this.robotPosition = this.el.object3D.position;
 
         this.distance = 0;
         this.factor = 0;
@@ -57,20 +59,18 @@ AFRAME.registerComponent('training-robot', {
         entity = document.createElement('a-entity');
         entity.id = "light-projectile";
         entity.setAttribute('geometry', {
-            primitive: 'sphere',
-            radius: 0.2
+            primitive: 'cylinder',
+            radius: 0.02,
+            height: 0.1
         });
         entity.setAttribute('material', 'color', this.data.color);
         entity.setAttribute('position', this.activeWeapon);
+        entity.setAttribute('rotation', '-90 0 -30');
         entity.setAttribute('visible', false);
         entity.classList.add('collideable');
 
         this.el.appendChild(entity);
         this.lightProjectile = entity;
-
-        this.currentLocalPosition = this.lightProjectile.object3D.position;
-        this.robotPosition = this.el.object3D.position;
-
 
         var self = this;
         this.lightProjectile.addEventListener('hitstart', function (event) {
@@ -82,13 +82,7 @@ AFRAME.registerComponent('training-robot', {
         });
 
         this.el.addEventListener('enable', function (event) {
-            self.enabled = true;
-            self.numShots = 0;
-            self.numHits = 0;
-            self.el.setAttribute('position', '10 1.5 -20');
-            self.el.setAttribute('visible', true);
-            self.trainingRobot.setAttribute('visible', true);
-            self.lightProjectile.s
+            self.setUp();
         });
 
         this.el.addEventListener('disable', function (event) {
@@ -102,12 +96,27 @@ AFRAME.registerComponent('training-robot', {
 
     },
 
+    setUp: function() {
+        this.numShots = 0;
+        this.numHits = 0;
+        this.el.setAttribute('position', '10 1.5 -20');
+        this.el.setAttribute('visible', true);
+
+        this.currentLocalPosition = this.lightProjectile.object3D.position;
+        this.targetWorldPosition.setFromMatrixPosition(this.data.target.object3D.matrixWorld);
+        this.robotPosition = this.el.object3D.position;
+        this.trainingRobot.setAttribute('visible', true);
+        this.lightProjectile.setAttribute('visible', false);
+
+        this.mode = this.MODE_HOVER;
+        this.enabled = true;
+    },
+
     tick: function (time, timeDelta) {
         if (this.enabled) {
             this.follow(time, timeDelta);
             this.fight(time, timeDelta);
         }
-
     },
 
 
@@ -128,7 +137,7 @@ AFRAME.registerComponent('training-robot', {
 
 
         // Don't go any closer if a close proximity has been reached.
-        if (this.distance < 10) {
+        if (this.distance < 15) {
             // Translate the entity in the direction against the target.
             this.el.setAttribute('position', {
                 x: this.robotPosition.x - this.directionVec3.x,
@@ -136,7 +145,7 @@ AFRAME.registerComponent('training-robot', {
                 y: this.robotPosition.y,// + this.directionVec3.y,
                 z: this.robotPosition.z - this.directionVec3.z
             });
-        } else if (this.distance > 10.1) {
+        } else if (this.distance > 15.1) {
 
             // Translate the entity in the direction towards the target.
             this.el.setAttribute('position', {
@@ -153,7 +162,6 @@ AFRAME.registerComponent('training-robot', {
 
     fight: function (time, timeDelta) {
 
-        this.lightProjectile.setAttribute('visible', true);
         this.currentLocalPosition = this.lightProjectile.object3D.position;
 
         // Grab global position vectors (THREE.Vector3) from the entities' three.js objects.
@@ -195,6 +203,7 @@ AFRAME.registerComponent('training-robot', {
             document.querySelector("#player-body").components['aabb-collider']['intersectedEls'].some(function (el) {
 
                 if (el.id == 'light-projectile') {
+                    this.mode = this.MODE_HOVER;
                     self.isHit = true;
                     self.numHits += 1;
                     self.hitLight.setAttribute('light', 'type: ambient; color: red; intensity: 1');
@@ -230,10 +239,11 @@ AFRAME.registerComponent('training-robot', {
     },
 
     recharge: function () {
-        this.nextWeapon = Math.floor((Math.random() * 4) + 1);
+        this.nextWeapon = Math.floor((Math.random() * 4));
         this.activeWeapon = this.WEAPONS[this.nextWeapon];
 
         this.lightProjectile.setAttribute('position', this.activeWeapon);
+        this.lightProjectile.setAttribute('visible', true);
         this.mode = this.MODE_SHOOT;
 
         this.targetWorldPosition.setFromMatrixPosition(this.data.target.object3D.matrixWorld);
