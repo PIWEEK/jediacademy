@@ -36,6 +36,7 @@ AFRAME.registerComponent('jediacademy', {
           self.showLsSelection();
           //self.startMinigame(document.querySelector("#destroyMiniRobotsGame"));
           //self.startMinigame(document.querySelector("#floatingLsGame"));
+          //self.startMinigame(document.querySelector("#trainingRobotGame"));
         }, 10000);
 
     },

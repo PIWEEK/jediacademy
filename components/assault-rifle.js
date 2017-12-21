@@ -78,8 +78,8 @@ AFRAME.registerComponent('assault-rifle', {
   },
 
   checkBlade: function(time, timeDelta) {
-
-    if (thid.bladeTimeOut > 0) {
+    this.bladeGeometry = this.lightsaberBlade.getAttribute("geometry");
+    if (this.bladeTimeOut > 0) {
       this.bladeGeometry.height = 100;
       this.bladeTimeOut -= timeDelta;
     } else {

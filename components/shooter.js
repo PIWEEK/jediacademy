@@ -48,7 +48,7 @@ AFRAME.registerComponent('shooter', {
 
 
         // Robot
-        entity = document.querySelector('#training-robot');
+        entity = document.createElement('a-entity')//document.querySelector('#training-robot');
         entity.setAttribute('rotation', '0 0 0');
 
         this.el.appendChild(entity);
