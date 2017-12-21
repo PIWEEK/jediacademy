@@ -38,7 +38,7 @@ AFRAME.registerComponent('dual-lightsaber', {
 
         this.el.appendChild(entity);
         this.lightsaberHilt = entity;
-        this.rotateQuat = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI / 2);
+        this.rotateQuat = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, -0.5, 1), Math.PI / 2);
 
 
         var self = this;

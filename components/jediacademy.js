@@ -81,6 +81,8 @@ AFRAME.registerComponent('jediacademy', {
         document.querySelector("#player-single-ls-2").emit("enable");
       } else if (lightsaber == 2) {
         document.querySelector("#player-dual-ls").emit("enable");
+      } else if (lightsaber == 3) {
+        document.querySelector("#player-assault-rifle").emit("enable");
       }
 
       this.showMenu();

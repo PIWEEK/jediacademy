@@ -31,6 +31,7 @@ AFRAME.registerComponent('forcehand', {
         } else {
           document.querySelector("#single-lightsaber-blade-1").emit("gripdown");
           document.querySelector("#dual-lightsaber-blade").emit("gripdown");
+          document.querySelector("#player-assault-rifle").emit("gripdown");
         }
 
       });
@@ -43,6 +44,7 @@ AFRAME.registerComponent('forcehand', {
         } else {
           document.querySelector("#single-lightsaber-blade-1").emit("gripup");
           document.querySelector("#dual-lightsaber-blade").emit("gripup");
+          document.querySelector("#player-assault-rifle").emit("gripup");
         }
 
       });
@@ -63,11 +65,13 @@ AFRAME.registerComponent('forcehand', {
       });
 
       el.addEventListener("pistolstart", evt => {
-        console.log("pistolstart")
+        console.log("pistolstart");
+        document.querySelector("#player-assault-rifle").emit("pistolstart");
       });
 
       el.addEventListener("pistolend", evt => {
-        console.log("pistolend")
+        console.log("pistolend");
+        document.querySelector("#player-assault-rifle").emit("pistolend");
       });
 
       el.addEventListener("click", evt => {
