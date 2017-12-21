@@ -182,7 +182,7 @@ AFRAME.registerComponent('training-robot', {
 
         if (this.mode == this.MODE_SHOOT) {
 
-            if (this.distance > 0) {
+            if (this.distance > 0.01) {
                 // Translate the entity in the direction towards the target.
                 this.lightProjectile.setAttribute('position', {
                     x: this.currentLocalPosition.x + this.directionVec3.x,
