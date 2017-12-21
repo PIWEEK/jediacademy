@@ -6,11 +6,14 @@ AFRAME.registerComponent('floating-lightsaber', {
       },
 
     init: function() {
-        this.MODE_WAIT = 0;
-        this.MODE_PREPARE = 1;
-        this.MODE_SWING = 2;
-        this.MODE_RETURN = 3;
-        this.MODE_GUARD = 4;
+        this.MODE_PREPARE_RIGHT = 0;
+        this.MODE_SWING_RIGHT_LEFT = 1;
+        this.MODE_GUARD_LEFT_CENTER = 2;
+        this.MODE_PREPARE_LEFT = 3;
+        this.MODE_SWING_LEFT_RIGHT = 4;
+        this.MODE_GUARD_RIGHT_CENTER = 5;
+        this.MODE_RETURN_RIGHT = 6;
+        this.MODE_RETURN_LEFT = 7;
 
         this.isHit = false;
         this.enabled = false;
@@ -18,13 +21,10 @@ AFRAME.registerComponent('floating-lightsaber', {
         this.numSwings = 0;
         this.numHits = 0;
 
-        this.mode = this.MODE_WAIT;
+        this.mode = this.MODE_PREPARE_RIGHT;
 
 
         this.directionVec3 = new THREE.Vector3();
-        this.rotationTmp = new THREE.Vector3();
-
-        this.rotationTarget = {x: 0, y: 0, z: 0};
 
         //Hit light
         var entity = document.createElement('a-entity');
@@ -78,8 +78,6 @@ AFRAME.registerComponent('floating-lightsaber', {
           self.numSwings = 0;
           self.numHits = 0;
           self.el.setAttribute('position', '0 1.5 -20');
-          self.el.setAttribute('rotation', '0 0 0');
-          self.mode = self.MODE_WAIT;
           self.el.setAttribute('visible', true);
         });
 
@@ -118,13 +116,8 @@ AFRAME.registerComponent('floating-lightsaber', {
           directionVec3[axis] *= factor * (timeDelta / 1000);
         });
 
-        if ((distance <= 1.4) && this.mode == this.MODE_WAIT) {
-          this.mode = this.MODE_GUARD;
-          console.log("MODE_GUARD");
-        }
-
         // Don't go any closer if a close proximity has been reached.
-        if (distance < 1.2) {
+        if (distance < 1.1) {
           // Translate the entity in the direction against the target.
           this.el.setAttribute('position', {
             x: currentPosition.x - directionVec3.x,
@@ -132,7 +125,7 @@ AFRAME.registerComponent('floating-lightsaber', {
             y: currentPosition.y,// + directionVec3.y,
             z: currentPosition.z - directionVec3.z
           });
-        } else if (distance > 1.3) {
+        } else if (distance > 1.2) {
 
           // Translate the entity in the direction towards the target.
           this.el.setAttribute('position', {
@@ -147,90 +140,92 @@ AFRAME.registerComponent('floating-lightsaber', {
 
       fight: function (time, timeDelta) {
         var el = this.el;
+        var rotationTmp = this.rotationTmp = this.rotationTmp || {x: 0, y: 0, z: 0};
         var rotation = el.getAttribute('rotation');
 
         var inc = this.data.speed * timeDelta;
 
-        if (this.mode == this.MODE_GUARD) {
-          //Convert to negative)
-          if (rotation.z > 180) {
-            this.rotationTmp.x = 0;
-            this.rotationTmp.y = 0;
-            this.rotationTmp.z = rotation.z - 360;
-            el.setAttribute('rotation', this.rotationTmp);
-          }
-          //Choose a new angle
-          //this.rotationTarget.z = 180 - (Math.random() * 360);
-          this.rotationTarget.z = 135 - (Math.random() * 90);
-          if (Math.random() > 0.5){
-            this.rotationTarget.z = -this.rotationTarget.z;
-          }
 
-
-
-
-
-
-
-          this.mode = this.MODE_PREPARE;
-          console.log("MODE_PREPARE");
-        } else if (this.mode == this.MODE_PREPARE){
-          this.rotationTmp.x = 0;
-          this.rotationTmp.y = 0;
-
-          if (Math.abs(rotation.z - this.rotationTarget.z) < 15) {
-            this.mode = this.MODE_SWING; //SWING
-            console.log("MODE_SWING");
-
-            // Convert rotation to positive
-            this.rotationTmp.z = rotation.z;
-            while (this.rotationTmp.z <= 0) {
-              this.rotationTmp.z += 360;
-            }
-
-            if (this.rotationTmp.z < 180){
-              this.rotationTarget.y = 90;
-            } else {
-              this.rotationTarget.y = -90;
-            }
-
-
-          } else if (rotation.z < this.rotationTarget.z){
-            this.rotationTmp.z = rotation.z + inc;
+        if (this.mode == this.MODE_PREPARE_RIGHT) {
+          if (rotation.z >= 90){
+              this.mode = this.MODE_SWING_RIGHT_LEFT;
           } else {
-            this.rotationTmp.z = rotation.z - inc;
+            rotationTmp.z = rotation.z + inc;
+            el.setAttribute('rotation', rotationTmp);
           }
-
-          el.setAttribute('rotation', this.rotationTmp);
-        } else if (this.mode == this.MODE_SWING){
-          this.rotationTmp.x = 0;
-          this.rotationTmp.z = rotation.z;
-
-          if (Math.abs(rotation.y - this.rotationTarget.y) < 5) {
-            this.mode = this.MODE_RETURN;
-            console.log("MODE_RETURN");
-            this.rotationTmp.y = rotation.y;
-          } else if (rotation.y < this.rotationTarget.y){
-            this.rotationTmp.y = rotation.y + inc;
+        } else if (this.mode == this.MODE_PREPARE_LEFT) {
+          if (rotation.z <= -90){
+              this.mode = this.MODE_SWING_LEFT_RIGHT;
           } else {
-            this.rotationTmp.y = rotation.y - inc;
+            rotationTmp.z = rotation.z - inc;
+            el.setAttribute('rotation', rotationTmp);
           }
-          el.setAttribute('rotation', this.rotationTmp);
-        } else if (this.mode == this.MODE_RETURN){
-          this.rotationTmp.x = 0;
-          this.rotationTmp.z = rotation.z;
-
-          if (Math.abs(rotation.y) < 10) {
-            this.mode = this.MODE_GUARD;
-            this.rotationTmp.y = 0;
-            console.log("MODE_GUARD");
-          } else if (rotation.y < 0){
-            this.rotationTmp.y = rotation.y + inc;
+        } else if (this.mode == this.MODE_SWING_RIGHT_LEFT) {
+          if (rotation.y>=180){
+              this.mode = this.MODE_GUARD_LEFT_CENTER;
+              this.addSwing();
           } else {
-            this.rotationTmp.y = rotation.y - inc;
+            rotationTmp.y = rotation.y + inc;
+            el.setAttribute('rotation', rotationTmp);
           }
-          el.setAttribute('rotation', this.rotationTmp);
+        } else if (this.mode == this.MODE_SWING_LEFT_RIGHT) {
+          if (rotation.y<=-180){
+              this.mode = this.MODE_GUARD_RIGHT_CENTER;
+              this.addSwing();
+          } else {
+            rotationTmp.y = rotation.y - inc;
+            el.setAttribute('rotation', rotationTmp);
+          }
+        } else if (this.mode == this.MODE_GUARD_LEFT_CENTER) {
+          if (rotation.z <= 0){
+              if (Math.random() >= 0.5){
+                this.mode = this.MODE_PREPARE_RIGHT;
+              } else {
+                this.mode = this.MODE_PREPARE_LEFT;
+              }
+              rotationTmp.z = 0;
+              rotationTmp.y = 0;
+              rotationTmp.x = 0;
+          } else {
+            rotationTmp.z = rotation.z - inc;
+          }
+          el.setAttribute('rotation', rotationTmp);
+        } else if (this.mode == this.MODE_GUARD_RIGHT_CENTER) {
+          if (rotation.z>=0){
+              if (Math.random() >= 0.5){
+                this.mode = this.MODE_PREPARE_RIGHT;
+              } else {
+                this.mode = this.MODE_PREPARE_LEFT;
+              }
+              rotationTmp.z = 0;
+              rotationTmp.y = 0;
+              rotationTmp.x = 0;
+          } else {
+            rotationTmp.z = rotation.z + inc;
+          }
+          el.setAttribute('rotation', rotationTmp);
+        } else if (this.mode == this.MODE_RETURN_RIGHT) {
+          if (rotation.y<=0){
+              this.mode = this.MODE_GUARD_RIGHT_CENTER;
+              rotationTmp.y = -180;
+              rotationTmp.z = -90;
+              rotationTmp.x = 0;
+          } else {
+            rotationTmp.y = rotation.y - inc;
+          }
+          el.setAttribute('rotation', rotationTmp);
+        } else if (this.mode == this.MODE_RETURN_LEFT) {
+          if (rotation.y>=0){
+              this.mode = this.MODE_GUARD_LEFT_CENTER;
+              rotationTmp.y = 180;
+              rotationTmp.z = 90;
+              rotationTmp.x = 0;
+          } else {
+            rotationTmp.y = rotation.y + inc;
+          }
+          el.setAttribute('rotation', rotationTmp);
         }
+
       },
 
       hitStart: function (entity) {
@@ -249,7 +244,12 @@ AFRAME.registerComponent('floating-lightsaber', {
             });
 
 
-          this.mode = this.MODE_RETURN;
+          if (this.mode == this.MODE_SWING_RIGHT_LEFT){
+            this.mode = this.MODE_RETURN_RIGHT;
+          } else if (this.mode == this.MODE_SWING_LEFT_RIGHT){
+            this.mode = this.MODE_RETURN_LEFT;
+          }
+
           this.addSwing();
         }
 
@@ -265,7 +265,7 @@ AFRAME.registerComponent('floating-lightsaber', {
       addSwing: function() {
         if (this.enabled) {
           this.numSwings += 1;
-          if (this.numSwings >= 20) {
+          if (this.numSwings >= 11) {
             this.enabled = false;
             this.el.setAttribute('visible', false);
             this.finalText = "TRAINING END\n\nSwings: " + (this.numSwings -1)+ "\nHits: " + this.numHits;
