@@ -268,9 +268,9 @@ AFRAME.registerComponent('floating-lightsaber', {
           if (this.numSwings >= 20) {
             this.enabled = false;
             this.el.setAttribute('visible', false);
-            this.finalText = "TRAINING END\n\nSwings: " + (this.numSwings -1)+ "\nHits: " + this.numHits;
+            this.finalText = "training end\n\nswings: " + (this.numSwings -1)+ "\nhits: " + this.numHits;
 
-            document.querySelector("#jediacademy").emit("endminigame", {text: this.finalText, color: "red"});
+            document.querySelector("#jediacademy").emit("endminigame", {text: this.finalText, color: "#ffe81f"});
 
           }
         }

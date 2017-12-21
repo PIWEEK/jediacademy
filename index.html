@@ -54,9 +54,9 @@
 
 
             <!-- LS SELECTOR -->
-            <a-entity id="menuLsSingle" ls-selector="photo: #single-ls-img; lightsaber: 0" position="-0.5 1 -1.5"></a-entity>
-            <a-entity id="menuLsTwo" ls-selector="photo: #two-ls-img; lightsaber: 1" position="0 1 -1.5"></a-entity>
-            <a-entity id="menuLsDual" ls-selector="photo: #dual-ls-img; lightsaber: 2" position="0.5 1 -1.5"></a-entity>
+            <a-entity id="menuLsSingle" ls-selector="photo: #single-ls-img; lightsaber: 0" position="-0.3 1 -1" rotation="-45 0 0"></a-entity>
+            <a-entity id="menuLsTwo" ls-selector="photo: #two-ls-img; lightsaber: 1" position="0 1 -1" rotation="-45 0 0"></a-entity>
+            <a-entity id="menuLsDual" ls-selector="photo: #dual-ls-img; lightsaber: 2" position="0.3 1 -1" rotation="-45 0 0"></a-entity>
 
 
             <!-- ENEMIES / minigames -->
@@ -83,9 +83,12 @@
             <a-entity id="camera" camera look-controls wasd-controls position="0 0 0">
                 <a-entity id="player-body" geometry="primitive: box; height: 1.6; width: 0.2; depth:0.2" position="0 -0.6 0"
                 material="opacity: 1" aabb-collider="objects: .collideable"></a-entity>
-
-                <a-entity id="hud" hud position="0.25 0 -0.5"></a-entity>
             </a-entity>
+
+
+            <a-text id="hud" hud position="-0.5 2 -2" value="jedi academy" color="#ffe81f" font="font/starJedi.fnt"></a-text>
+
+
 
 
 

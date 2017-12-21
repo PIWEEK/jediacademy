@@ -32,10 +32,11 @@ AFRAME.registerComponent('jediacademy', {
         console.log("Jediacademy is loaded!!");
         var self = this;
         setTimeout(function(){
+          document.querySelector("#hud").emit("hide");
           self.showLsSelection();
           //self.startMinigame(document.querySelector("#destroyMiniRobotsGame"));
           //self.startMinigame(document.querySelector("#floatingLsGame"));
-        }, 3000);
+        }, 10000);
 
     },
 

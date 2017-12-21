@@ -11,9 +11,9 @@ AFRAME.registerComponent('ls-selector', {
 
         entity.setAttribute('geometry', {
             primitive: 'box',
-            height: 0.512,
-            width: 0.384,
-            depth: 0.05
+            height: 0.256,
+            width: 0.190,
+            depth: 0.025
         });
         entity.setAttribute('material', 'src', this.data.photo);
         entity.setAttribute('position', '0 0.5 0');

@@ -2,11 +2,15 @@ AFRAME.registerComponent('hud', {
     init: function () {
       this.textTimeout = 0;
       var self = this;
-      this.el.addEventListener('showtext', function (event) {          
-        self.showText(event.detail.text, event.detail.color)
+      this.el.addEventListener('showtext', function (event) {
+        self.showText(event.detail.text, event.detail.color);
       });
 
-      
+      this.el.addEventListener('hide', function (event) {
+        self.el.setAttribute('visible', false);
+      });
+
+
 
 
 
@@ -26,7 +30,7 @@ AFRAME.registerComponent('hud', {
 
 
     showText: function(text, color) {
-      this.el.setAttribute('text', 'value:' +text+'; color:'+color);
+      this.el.setAttribute('text', 'value:' +text+'; color:'+color+';font:font/starJedi.fnt');
       this.el.setAttribute('visible', true);
       this.textTimeout = 5000;
     }
