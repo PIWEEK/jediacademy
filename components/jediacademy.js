@@ -33,10 +33,11 @@ AFRAME.registerComponent('jediacademy', {
         var self = this;
         setTimeout(function(){
           document.querySelector("#hud").emit("hide");
-          self.showLsSelection();
+          //self.showLsSelection();
           //self.startMinigame(document.querySelector("#destroyMiniRobotsGame"));
           //self.startMinigame(document.querySelector("#floatingLsGame"));
           //self.startMinigame(document.querySelector("#trainingRobotGame"));
+          self.chooseLs(3);
         }, 10000);
 
     },

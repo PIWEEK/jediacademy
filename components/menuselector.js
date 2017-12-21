@@ -23,7 +23,7 @@ AFRAME.registerComponent('menu-selector', {
         this.el.appendChild(entity);
 
         var self = this;
-        this.el.addEventListener('hitstart', function (event) {
+        this.el.addEventListener('hitstart', function (event) {            
             self.hitStart();
         });
         this.el.addEventListener('enable', function (event) {
@@ -38,6 +38,7 @@ AFRAME.registerComponent('menu-selector', {
 
     hitStart: function() {
         if (this.enabled) {
+            console.log("MENU HIT");
             this.enabled = false;
             this.el.setAttribute('visible', false);
             document.querySelector("#jediacademy").emit("startminigame", {minigame:this.data.minigame})

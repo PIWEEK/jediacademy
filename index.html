@@ -48,7 +48,7 @@
             <a-entity id="single-lightsaber-blade-1" position="0 -100 -20" geometry="primitive: cylinder; radius: 0.01; height: 0;" aabb-collider="objects: .collideable"></a-entity>
             <a-entity id="single-lightsaber-blade-2" position="0 -100 -20" geometry="primitive: cylinder; radius: 0.01; height: 0;" aabb-collider="objects: .collideable"></a-entity>
             <a-entity id="dual-lightsaber-blade" position="0 -100 -20" geometry="primitive: cylinder; radius: 0.01; height: 0;" aabb-collider="objects: .collideable"></a-entity>
-            <a-entity id="assault-rifle-laser" position="0 -100 -20" geometry="primitive: cylinder; radius: 0.003; height: 0;" aabb-collider="objects: .collideable"></a-entity>
+            <a-entity id="assault-rifle-laser" position="0 -100 -20" geometry="primitive: cylinder; radius: 0.01; height: 0.1;" aabb-collider="objects: .collideable"></a-entity>
 
             <a-entity id="leftHand" hand-controls="left" forcehand aabb-collider="objects: .ls-selector-collideable"></a-entity>
             <a-entity id="rightHand" hand-controls="right" forcehand aabb-collider="objects: .ls-selector-collideable"></a-entity>
@@ -87,8 +87,8 @@
 
 
 
-
-            <a-entity id="camera" camera look-controls wasd-controls position="0 0 0">
+            <!-- MENU -->
+            <a-entity id="camera" camera look-controls wasd-controls position="0 1.6 0">
                 <a-entity id="player-body" geometry="primitive: box; height: 1.6; width: 0.2; depth:0.2" position="0 -0.6 0"
                 material="opacity: 1" aabb-collider="objects: .collideable"></a-entity>
             </a-entity>
