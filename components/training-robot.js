@@ -10,8 +10,8 @@ AFRAME.registerComponent('training-robot', {
         this.MODE_SHOOT = 1;
 
         this.WEAPON_UP_LEFT = '-1 0.2 1';
-        this.WEAPON_UP_RIGHT = '0 0.2 1';
-        this.WEAPON_DOWN_RIGHT = '0 -0.3 1';
+        this.WEAPON_UP_RIGHT = '0.5 0.2 1';
+        this.WEAPON_DOWN_RIGHT = '0.5 -0.3 1';
         this.WEAPON_DOWN_LEFT = '-1 -0.3 1';
 
         this.WEAPONS = {
@@ -20,6 +20,16 @@ AFRAME.registerComponent('training-robot', {
             2: this.WEAPON_DOWN_LEFT,
             3: this.WEAPON_DOWN_RIGHT
         }
+
+        this.MAX_POSITION = {
+            'x': 5,
+            'y': 6
+        };
+
+        this.MIN_POSITION = {
+            'x': -5,
+            'y': 1.7
+        };
 
         this.isHit = false;
         this.enabled = false;
@@ -36,6 +46,7 @@ AFRAME.registerComponent('training-robot', {
         this.currentWorldPosition = new THREE.Vector3();
         this.currentLocalPosition = this.el.object3D.position;
         this.robotPosition = this.el.object3D.position;
+        this.followPosition = new THREE.Vector3();
 
         this.distance = 0;
         this.factor = 0;
@@ -59,9 +70,9 @@ AFRAME.registerComponent('training-robot', {
         entity = document.createElement('a-entity');
         entity.id = "light-projectile";
         entity.setAttribute('geometry', {
-            primitive: 'cylinder',
-            radius: 0.02,
-            height: 0.1
+            primitive: 'sphere',
+            radius: 0.02
+            // height: 0.1
         });
         entity.setAttribute('material', 'color', this.data.color);
         entity.setAttribute('position', this.activeWeapon);
@@ -71,6 +82,7 @@ AFRAME.registerComponent('training-robot', {
 
         this.el.appendChild(entity);
         this.lightProjectile = entity;
+
 
         var self = this;
         this.lightProjectile.addEventListener('hitstart', function (event) {
@@ -99,12 +111,17 @@ AFRAME.registerComponent('training-robot', {
     setUp: function() {
         this.numShots = 0;
         this.numHits = 0;
-        this.el.setAttribute('position', '10 1.5 -20');
+        this.el.setAttribute('position', '0 6 -40');
         this.el.setAttribute('visible', true);
 
         this.currentLocalPosition = this.lightProjectile.object3D.position;
         this.targetWorldPosition.setFromMatrixPosition(this.data.target.object3D.matrixWorld);
         this.robotPosition = this.el.object3D.position;
+
+        this.followPosition['x'] = 0;
+        this.followPosition['y'] = 6;
+        this.followPosition['z'] = -15;
+
         this.trainingRobot.setAttribute('visible', true);
         this.lightProjectile.setAttribute('visible', false);
 
@@ -121,66 +138,78 @@ AFRAME.registerComponent('training-robot', {
 
 
     follow: function (time, timeDelta) {
-        // Grab position vectors (THREE.Vector3) from the entities' three.js objects.
-        this.robotPosition = this.el.object3D.position;
+        if (this.mode === this.MODE_HOVER) {
+            // Grab position vectors (THREE.Vector3) from the entities' three.js objects.
+            this.robotPosition = this.el.object3D.position;
 
-        // Subtract the vectors to get the direction the entity should head in.
-        this.directionVec3.copy(this.data.target.object3D.position).sub(this.robotPosition);
-        // Calculate the distance.
-        this.distance = this.directionVec3.length();
-        // Scale the direction vector's magnitude down to match the speed.
-        var self = this;
-        this.factor = 10 / this.distance;
-        ['x', 'y', 'z'].forEach(function (axis) {
-            self.directionVec3[axis] *= self.factor * (timeDelta / 1000);
-        });
+            // Subtract the vectors to get the direction the entity should head in.
+            this.directionVec3.copy(this.followPosition).sub(this.robotPosition);
+            // Calculate the distance.
+            this.distance = this.directionVec3.length();
+            this.factor = (30 / this.distance) * (timeDelta / 1000);
 
+            // Don't go any closer if a close proximity has been reached.
+            if (this.distance < 0) {
 
-        // Don't go any closer if a close proximity has been reached.
-        if (this.distance < 15) {
-            // Translate the entity in the direction against the target.
-            this.el.setAttribute('position', {
-                x: this.robotPosition.x - this.directionVec3.x,
-                // Do not change height
-                y: this.robotPosition.y,// + this.directionVec3.y,
-                z: this.robotPosition.z - this.directionVec3.z
-            });
-        } else if (this.distance > 15.1) {
-
-            // Translate the entity in the direction towards the target.
-            this.el.setAttribute('position', {
-                x: this.robotPosition.x + this.directionVec3.x,
-                // Do not change height
-                y: this.robotPosition.y,// + this.directionVec3.y,
-                z: this.robotPosition.z + this.directionVec3.z
-            });
-        } else if (this.mode == this.MODE_HOVER) {
-            this.recharge();
+                // Scale the direction vector's magnitude down to match the speed.
+                // Translate the entity in the direction against the target.
+                this.el.setAttribute('position', {
+                    x: this.robotPosition.x - (this.directionVec3.x * this.factor),
+                    y: this.robotPosition.y - (this.directionVec3.y * this.factor),
+                    z: this.robotPosition.z - (this.directionVec3.z * this.factor)
+                });
+            } else if (this.distance > 0.1) {
+                // Translate the entity in the direction towards the target.
+                this.el.setAttribute('position', {
+                    x: this.robotPosition.x + (this.directionVec3.x * this.factor),
+                    y: this.robotPosition.y + (this.directionVec3.y * this.factor),
+                    z: this.robotPosition.z + (this.directionVec3.z * this.factor)
+                });
+            } else {
+                this.changeFollowPosition();
+                this.recharge();
+            }
         }
+    },
+
+    changeFollowPosition: function() {
+        // Choose a new position for the robot to follow
+        this.followPosition.copy(this.el.object3D.position);
+
+        var self = this;
+        ['x', 'y'].forEach(function (axis) {
+            var sense = Math.random() < 0.5 ? -1 : 1;
+            self.followPosition[axis] += sense * (Math.random() * 5 );
+
+            if (self.followPosition[axis] > self.MAX_POSITION[axis]) {
+                self.followPosition[axis] = self.MAX_POSITION[axis];
+            } else if (self.followPosition[axis] < self.MIN_POSITION[axis]) {
+                self.followPosition[axis] = self.MIN_POSITION[axis];
+            }
+        });
     },
 
 
     fight: function (time, timeDelta) {
 
-        this.currentLocalPosition = this.lightProjectile.object3D.position;
+        if (this.mode === this.MODE_SHOOT) {
 
-        // Grab global position vectors (THREE.Vector3) from the entities' three.js objects.
-        this.currentWorldPosition.setFromMatrixPosition(this.lightProjectile.object3D.matrixWorld);
+            this.currentLocalPosition = this.lightProjectile.object3D.position;
 
-        // Subtract the vectors to get the direction the entity should head in.
-        this.directionVec3.copy(this.targetWorldPosition).sub(this.currentWorldPosition);
-        // Calculate the distance.
-        this.distance = this.directionVec3.length();
+            // Grab global position vectors (THREE.Vector3) from the entities' three.js objects.
+            this.currentWorldPosition.setFromMatrixPosition(this.lightProjectile.object3D.matrixWorld);
 
-        // Scale the direction vector's magnitude down to match the speed.
-        var self = this;
-        this.factor = (20 * this.data.speed) / this.distance;
-        ['x', 'y', 'z'].forEach(function (axis) {
-            self.directionVec3[axis] *= self.factor * (timeDelta / 1000);
-        });
+            // Subtract the vectors to get the direction the entity should head in.
+            this.directionVec3.copy(this.targetWorldPosition).sub(this.currentWorldPosition);
+            // Calculate the distance.
+            this.distance = this.directionVec3.length();
 
-
-        if (this.mode == this.MODE_SHOOT) {
+            // Scale the direction vector's magnitude down to match the speed.
+            var self = this;
+            this.factor = (20 * this.data.speed) / this.distance;
+            ['x', 'y', 'z'].forEach(function (axis) {
+                self.directionVec3[axis] *= self.factor * (timeDelta / 1000);
+            });
 
             if (this.distance > 0.01) {
                 // Translate the entity in the direction towards the target.
@@ -191,7 +220,6 @@ AFRAME.registerComponent('training-robot', {
                     z: this.currentLocalPosition.z + this.directionVec3.z
                 });
             } else {
-                this.mode = this.MODE_HOVER;
                 this.addShot();
             }
         }
@@ -202,7 +230,7 @@ AFRAME.registerComponent('training-robot', {
             var self = this;
             document.querySelector("#player-body").components['aabb-collider']['intersectedEls'].some(function (el) {
 
-                if (el.id == 'light-projectile') {
+                if (el.id === 'light-projectile') {
                     this.mode = this.MODE_HOVER;
                     self.isHit = true;
                     self.numHits += 1;
@@ -227,6 +255,7 @@ AFRAME.registerComponent('training-robot', {
     addShot: function () {
         if (this.enabled) {
             this.numShots += 1;
+            this.mode = this.MODE_HOVER;
 
             if (this.numShots >= 20) {
                 this.enabled = false;
@@ -234,8 +263,6 @@ AFRAME.registerComponent('training-robot', {
                 this.finalText = "TRAINING END\n\nShots: " + this.numShots + "\nHits: " + this.numHits;
 
                 document.querySelector("#jediacademy").emit("endminigame", {text: this.finalText, color: "red"});
-            } else {
-                this.recharge();
             }
         }
     },
@@ -246,8 +273,8 @@ AFRAME.registerComponent('training-robot', {
 
         this.lightProjectile.setAttribute('position', this.activeWeapon);
         this.lightProjectile.setAttribute('visible', true);
-        this.mode = this.MODE_SHOOT;
-
         this.targetWorldPosition.setFromMatrixPosition(this.data.target.object3D.matrixWorld);
+
+        this.mode = this.MODE_SHOOT;
     }
 });
