@@ -225,16 +225,18 @@ AFRAME.registerComponent('training-robot', {
     },
 
     addShot: function () {
-        this.numShots += 1;
+        if (this.enabled) {
+            this.numShots += 1;
 
-        if (this.numShots >= 3) {
-            this.enabled = false;
-            this.el.setAttribute('visible', false);
-            this.finalText = "TRAINING END\n\nShots: " + this.numShots + "\nHits: " + this.numHits;
+            if (this.numShots >= 20) {
+                this.enabled = false;
+                this.el.setAttribute('visible', false);
+                this.finalText = "TRAINING END\n\nShots: " + this.numShots + "\nHits: " + this.numHits;
 
-            document.querySelector("#jediacademy").emit("endminigame", {text: this.finalText, color: "red"});
-        } else {
-            this.recharge();
+                document.querySelector("#jediacademy").emit("endminigame", {text: this.finalText, color: "red"});
+            } else {
+                this.recharge();
+            }
         }
     },
 
