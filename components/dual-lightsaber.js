@@ -6,6 +6,7 @@ AFRAME.registerComponent('dual-lightsaber', {
 
     init: function() {
         this.enabled = false;
+        this.bladeOn = false;
         this.el.setAttribute('visible', false);
         this.el.setAttribute('position', '0 -100 0');
 
@@ -13,6 +14,16 @@ AFRAME.registerComponent('dual-lightsaber', {
         var entity = document.querySelector('#dual-lightsaber-blade');
 
         entity.setAttribute('position', '0 0 0');
+
+        entity.addEventListener("gripdown", evt => {
+          console.log("gripdown");
+          self.bladeOn = true;
+        });
+
+        entity.addEventListener("gripup", evt => {
+          console.log("gripup");
+          self.bladeOn = false;
+        });
 
         this.el.appendChild(entity);
         this.lightsaberBlade = entity;
@@ -41,6 +52,7 @@ AFRAME.registerComponent('dual-lightsaber', {
 
     tick: function (time, timeDelta) {
       if (this.enabled) {
+        this.checkBlade(time, timeDelta);
         this.follow();
       }
     },
@@ -50,7 +62,33 @@ AFRAME.registerComponent('dual-lightsaber', {
         this.el.object3D.position.copy(this.data.target.object3D.position);
         this.el.object3D.quaternion.copy(this.data.target.object3D.quaternion);
         this.el.object3D.quaternion.multiply(this.rotateQuat);
-      },
+    },
+
+    checkBlade: function(time, timeDelta) {
+      this.bladeGeometry = this.lightsaberBlade.getAttribute("geometry");
+      if (this.bladeOn) {
+        if (this.bladeGeometry.height < 2.2){
+          this.bladeGeometry.height += 0.006 * timeDelta;
+          if (this.bladeGeometry.height > 2.2){
+            this.bladeGeometry.height = 2.2;
+          }
+
+          this.lightsaberBlade.setAttribute("geometry", this.bladeGeometry)
+        }
+      } else {
+        if (this.bladeGeometry.height >0) {
+          this.bladeGeometry.height -= 0.006 * timeDelta;
+          if (this.bladeGeometry.height < 0){
+            this.bladeGeometry.height = 0;
+          }
+
+          this.lightsaberBlade.setAttribute("geometry", this.bladeGeometry)
+
+        }
+      }
+
+
+    }
 
 
 });

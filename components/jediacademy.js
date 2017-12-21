@@ -1,6 +1,9 @@
 AFRAME.registerComponent('jediacademy', {
     init: function () {
       var sceneEl = this.el;
+      this.rightBlade = null;
+      this.leftBlade = null;
+
       if (sceneEl.hasLoaded) {
         this.run();
       } else {
@@ -23,8 +26,6 @@ AFRAME.registerComponent('jediacademy', {
       this.el.addEventListener('choosels', function (event) {
         self.chooseLs(event.detail.lightsaber);
       });
-
-
 
     },
     run: function() {

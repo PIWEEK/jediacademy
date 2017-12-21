@@ -41,12 +41,12 @@
 
 
             <!-- Player lightsabers -->
-            <a-entity id="single-lightsaber-blade-1" position="0 -100 -20" geometry="primitive: cylinder; radius: 0.01; height: 1.2;" aabb-collider="objects: .collideable"></a-entity>
-            <a-entity id="single-lightsaber-blade-2" position="0 -100 -20" geometry="primitive: cylinder; radius: 0.01; height: 1.2;" aabb-collider="objects: .collideable"></a-entity>
-            <a-entity id="dual-lightsaber-blade" position="0 -100 -20" geometry="primitive: cylinder; radius: 0.01; height: 2.2;" aabb-collider="objects: .collideable"></a-entity>
+            <a-entity id="single-lightsaber-blade-1" position="0 -100 -20" geometry="primitive: cylinder; radius: 0.01; height: 0;" aabb-collider="objects: .collideable"></a-entity>
+            <a-entity id="single-lightsaber-blade-2" position="0 -100 -20" geometry="primitive: cylinder; radius: 0.01; height: 0;" aabb-collider="objects: .collideable"></a-entity>
+            <a-entity id="dual-lightsaber-blade" position="0 -100 -20" geometry="primitive: cylinder; radius: 0.01; height: 0;" aabb-collider="objects: .collideable"></a-entity>
 
             <a-entity id="leftHand" hand-controls="left" forcehand aabb-collider="objects: .ls-selector-collideable"></a-entity>
-            <a-entity id="rightHand" hand-controls="right" aabb-collider="objects: .ls-selector-collideable"></a-entity>
+            <a-entity id="rightHand" hand-controls="right" forcehand aabb-collider="objects: .ls-selector-collideable"></a-entity>
 
             <a-entity id="player-single-ls-1" single-lightsaber="color:blue; target: #rightHand; blade: #single-lightsaber-blade-1; left: false" aabb-collider="objects: .collideable"></a-entity>
             <a-entity id="player-single-ls-2" single-lightsaber="color:blue; target: #leftHand; blade: #single-lightsaber-blade-2; left: true" aabb-collider="objects: .collideable"></a-entity>

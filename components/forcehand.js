@@ -25,11 +25,26 @@ AFRAME.registerComponent('forcehand', {
 
       el.addEventListener("gripdown", evt => {
         console.log("gripdown");
-        window.location.reload(false);
+        console.log(evt);
+        if (evt.target.id == "leftHand"){
+          document.querySelector("#single-lightsaber-blade-2").emit("gripdown");
+        } else {
+          document.querySelector("#single-lightsaber-blade-1").emit("gripdown");
+          document.querySelector("#dual-lightsaber-blade").emit("gripdown");
+        }
+
       });
 
       el.addEventListener("gripup", evt => {
         console.log("gripup");
+        console.log(evt);
+        if (evt.target.id == "leftHand"){
+          document.querySelector("#single-lightsaber-blade-2").emit("gripup");
+        } else {
+          document.querySelector("#single-lightsaber-blade-1").emit("gripup");
+          document.querySelector("#dual-lightsaber-blade").emit("gripup");
+        }
+
       });
 
       el.addEventListener("thumbup", evt => {
