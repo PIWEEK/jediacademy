@@ -51,11 +51,16 @@ AFRAME.registerComponent('training-robot', {
         this.distance = 0;
         this.factor = 0;
 
+
         //Hit light
         var entity = document.createElement('a-entity');
         this.hitLight = entity;
         this.hitLight.setAttribute('light', 'type: ambient; color: red; intensity: 0');
         this.el.appendChild(entity);
+
+        // Sound
+        // entity = document.querySelector('#background-music');
+        // entity.components.sound.playSound();
 
 
         // Robot
@@ -92,11 +97,13 @@ AFRAME.registerComponent('training-robot', {
         });
         entity.setAttribute('material', 'color', this.data.color);
         entity.setAttribute('position', this.activeWeapon);
-        // entity.setAttribute('rotation', '-90 0 -30');
         entity.setAttribute('visible', false);
         this.lightProjectile = entity;
         this.el.appendChild(this.lightProjectile);
 
+        // // Shooting sound
+        // entity = document.querySelector('#robot-shooting-sound');
+        // this.shootingSound = entity.components.sound;
 
 
         var self = this;
@@ -161,17 +168,6 @@ AFRAME.registerComponent('training-robot', {
             this.distance = this.directionVec3.length();
             this.factor = (30 / this.distance) * (timeDelta / 1000);
 
-            // Don't go any closer if a close proximity has been reached.
-            /*if (this.distance < 0) {
-
-                // Scale the direction vector's magnitude down to match the speed.
-                // Translate the entity in the direction against the target.
-                this.el.setAttribute('position', {
-                    x: this.robotPosition.x - (this.directionVec3.x * this.factor),
-                    y: this.robotPosition.y - (this.directionVec3.y * this.factor),
-                    z: this.robotPosition.z - (this.directionVec3.z * this.factor)
-                });
-            } else */
             if (this.distance > 0.1) {
                 // Translate the entity in the direction towards the target.
                 this.el.setAttribute('position', {
@@ -296,5 +292,6 @@ AFRAME.registerComponent('training-robot', {
         this.targetWorldPosition.setFromMatrixPosition(this.data.target.object3D.matrixWorld);
 
         this.mode = this.MODE_SHOOT;
+        // this.shootingSound.playSound();
     }
 });

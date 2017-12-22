@@ -41,8 +41,13 @@
                 <img id="two-ls-img" src="img/two-ls.png" crossorigin="anonymous" />
                 <img id="dual-ls-img" src="img/dual-ls.png" crossorigin="anonymous" />
                 <img id="assault-rifle-img" src="img/assault-rifle.png" crossorigin="anonymous" />
+
+                <audio id="bensound-epic" src="sound/bensound-epic.wav" preload="auto"></audio>
+                <!--<audio id="laser-blast" src="audio/laser-blast.flac" preload="auto"></audio>-->
             </a-assets>
 
+            <a-entity id="background-music" sound="src: #bensound-epic; volume: 0.4; autoplay: true;"></a-entity>
+            <!--<a-entity id="robot-shooting-sound" sound="src: #laser-blast"></a-entity>-->
 
             <!-- Player lightsabers -->
             <a-entity id="single-lightsaber-blade-1" position="0 -100 -20" geometry="primitive: cylinder; radius: 0.01; height: 0;"></a-entity>
