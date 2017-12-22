@@ -3,7 +3,8 @@ AFRAME.registerComponent('single-lightsaber', {
         color: {type: 'string'},
         target: {type: 'selector'},
         blade: {type: 'selector'},
-        left: {type: 'boolean'}
+        left: {type: 'boolean'},
+        parts: {type: 'string'}
       },
 
     init: function() {
@@ -30,6 +31,14 @@ AFRAME.registerComponent('single-lightsaber', {
           console.log("gripup");
           self.bladeOn = false;
         });
+
+        //Blade parts
+        this.bladeParts = document.querySelectorAll("."+this.data.parts);
+        for (var i=0;i<this.bladeParts.length;i++) {
+          this.el.appendChild(this.bladeParts[i]);
+          this.bladeParts[i].setAttribute('visible', false);
+          this.bladeParts[i].setAttribute('position', '0 '+(0.1 + i*0.2)+' 0');
+        }
 
 
         // Hilt
@@ -81,6 +90,10 @@ AFRAME.registerComponent('single-lightsaber', {
     checkBlade: function(time, timeDelta) {
       this.bladeGeometry = this.lightsaberBlade.getAttribute("geometry");
       if (this.bladeOn) {
+        for (var i=0;i<this.bladeParts.length;i++) {
+          this.bladeParts[i].setAttribute('visible', true);
+        }
+
         if (this.bladeGeometry.height < 1.2){
           this.bladeGeometry.height += 0.003 * timeDelta;
           if (this.bladeGeometry.height > 1.2){
@@ -91,6 +104,9 @@ AFRAME.registerComponent('single-lightsaber', {
           this.lightsaberBlade.setAttribute('position', '0 '+(this.bladeGeometry.height/2)+' 0');
         }
       } else {
+        for (var i=0;i<this.bladeParts.length;i++) {
+          this.bladeParts[i].setAttribute('visible', false);
+        }
         if (this.bladeGeometry.height >0) {
           this.bladeGeometry.height -= 0.003 * timeDelta;
           if (this.bladeGeometry.height < 0){

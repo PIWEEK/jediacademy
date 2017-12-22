@@ -28,6 +28,15 @@ AFRAME.registerComponent('dual-lightsaber', {
         this.el.appendChild(entity);
         this.lightsaberBlade = entity;
 
+        //Blade parts
+        this.bladeParts = document.querySelectorAll(".duallightsaberbladepart");
+        for (var i=0;i<this.bladeParts.length;i++) {
+          this.el.appendChild(this.bladeParts[i]);
+          this.bladeParts[i].setAttribute('visible', false);
+          this.bladeParts[i].setAttribute('position', '0 '+(i*0.2 - 1)+' 0');
+        }
+
+
         // Hilt
         var entity = document.createElement('a-entity');
         entity.id = "dual-lightsaber-hilt";
@@ -67,6 +76,9 @@ AFRAME.registerComponent('dual-lightsaber', {
     checkBlade: function(time, timeDelta) {
       this.bladeGeometry = this.lightsaberBlade.getAttribute("geometry");
       if (this.bladeOn) {
+        for (var i=0;i<this.bladeParts.length;i++) {
+          this.bladeParts[i].setAttribute('visible', true);
+        }
         if (this.bladeGeometry.height < 2.2){
           this.bladeGeometry.height += 0.006 * timeDelta;
           if (this.bladeGeometry.height > 2.2){
@@ -76,6 +88,9 @@ AFRAME.registerComponent('dual-lightsaber', {
           this.lightsaberBlade.setAttribute("geometry", this.bladeGeometry)
         }
       } else {
+        for (var i=0;i<this.bladeParts.length;i++) {
+          this.bladeParts[i].setAttribute('visible', false);
+        }
         if (this.bladeGeometry.height >0) {
           this.bladeGeometry.height -= 0.006 * timeDelta;
           if (this.bladeGeometry.height < 0){
