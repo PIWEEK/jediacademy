@@ -14,6 +14,7 @@ AFRAME.registerComponent('floating-lightsaber', {
 
         this.isHit = false;
         this.enabled = false;
+        this.lastSwingTimestamp = 0;
 
         this.numSwings = 0;
         this.numHits = 0;
@@ -166,11 +167,7 @@ AFRAME.registerComponent('floating-lightsaber', {
             this.rotationTarget.z = -this.rotationTarget.z;
           }
 
-
-
-
-
-
+          this.addSwing(time);
 
           this.mode = this.MODE_PREPARE;
           console.log("MODE_PREPARE");
@@ -234,23 +231,24 @@ AFRAME.registerComponent('floating-lightsaber', {
       },
 
       hitStart: function (entity) {
-        if (!this.isHit){
+        if (this.mode == this.MODE_SWING){
+          if (!this.isHit){
 
-            var self = this;
-            document.querySelector("#player-body").components['aabb-collider']['intersectedEls'].some(function (el) {
+              var self = this;
+              document.querySelector("#player-body").components['aabb-collider']['intersectedEls'].some(function (el) {
 
-                if (el.id == 'floating-lightsaber-blade') {
-                    self.isHit = true;
-                    self.numHits += 1;
-                    self.hitLight.setAttribute('light', 'type: ambient; color: red; intensity: 1');
+                  if (el.id == 'floating-lightsaber-blade') {
+                      self.isHit = true;
+                      self.numHits += 1;
+                      self.hitLight.setAttribute('light', 'type: ambient; color: red; intensity: 1');
 
-                    return true;
-                }
-            });
+                      return true;
+                  }
+              });
 
 
-          this.mode = this.MODE_RETURN;
-          this.addSwing();
+            this.mode = this.MODE_RETURN;
+          }
         }
 
       },
@@ -262,16 +260,19 @@ AFRAME.registerComponent('floating-lightsaber', {
 
       },
 
-      addSwing: function() {
+      addSwing: function(time) {
         if (this.enabled) {
-          this.numSwings += 1;
-          if (this.numSwings >= 20) {
-            this.enabled = false;
-            this.el.setAttribute('visible', false);
-            this.finalText = "training end\n\nswings: " + (this.numSwings -1)+ "\nhits: " + this.numHits;
+          if (time - this.lastSwingTimestamp > 700){
+            this.lastSwingTimestamp = time;
+            this.numSwings += 1;
+            if (this.numSwings >= 21) {
+              this.enabled = false;
+              this.el.setAttribute('visible', false);
+              this.finalText = "training end\n\nscore: " + ((this.numSwings-1) * 100 - this.numHits)+ "\nhits: " + this.numHits;
 
-            document.querySelector("#jediacademy").emit("endminigame", {text: this.finalText, color: "#ffe81f"});
+              document.querySelector("#jediacademy").emit("endminigame", {text: this.finalText, color: "#ffe81f"});
 
+            }
           }
         }
       }

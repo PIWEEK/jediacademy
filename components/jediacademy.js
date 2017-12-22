@@ -4,6 +4,7 @@ AFRAME.registerComponent('jediacademy', {
       this.rightBlade = null;
       this.leftBlade = null;
 
+
       if (sceneEl.hasLoaded) {
         this.run();
       } else {
