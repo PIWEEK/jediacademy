@@ -162,7 +162,7 @@ AFRAME.registerComponent('training-robot', {
             this.factor = (30 / this.distance) * (timeDelta / 1000);
 
             // Don't go any closer if a close proximity has been reached.
-            if (this.distance < 0) {
+            /*if (this.distance < 0) {
 
                 // Scale the direction vector's magnitude down to match the speed.
                 // Translate the entity in the direction against the target.
@@ -171,7 +171,8 @@ AFRAME.registerComponent('training-robot', {
                     y: this.robotPosition.y - (this.directionVec3.y * this.factor),
                     z: this.robotPosition.z - (this.directionVec3.z * this.factor)
                 });
-            } else if (this.distance > 0.1) {
+            } else */
+            if (this.distance > 0.1) {
                 // Translate the entity in the direction towards the target.
                 this.el.setAttribute('position', {
                     x: this.robotPosition.x + (this.directionVec3.x * this.factor),
