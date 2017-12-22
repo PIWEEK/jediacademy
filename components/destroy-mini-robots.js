@@ -45,8 +45,8 @@ AFRAME.registerComponent('destroy-mini-robots', {
           self.totalTime = 0;
           console.log("start");
 
-          for (var i = 0; i < 10; i++) {
-            self.robots[i].setAttribute('alive', true);
+          for (var i = 0; i < 3; i++) {
+            self.robots[i].setAttribute('alive', "true");
             self.robots[i].setAttribute('material', 'color', "white");
             self.robots[i].setAttribute('visible', true);
             self.robots[i].setAttribute('position', {
@@ -57,8 +57,9 @@ AFRAME.registerComponent('destroy-mini-robots', {
           }
 
           for (var i = 3; i < 6; i++) {
-            self.robots[i].setAttribute('alive', true);
-            self.robots[i].setAttribute('visible', true);
+            self.robots[i].setAttribute('alive', "true");
+            self.robots[i].setAttribute('material', 'color', "white");
+            self.robots[i].setAttribute('visible', "true");
             self.robots[i].setAttribute('position', {
               x: 0 - Math.random() * 2,
               y: 0.5 + Math.random() * 1.5,
@@ -67,7 +68,8 @@ AFRAME.registerComponent('destroy-mini-robots', {
           }
 
           for (var i = 6; i < 10; i++) {
-            self.robots[i].setAttribute('alive', true);
+            self.robots[i].setAttribute('alive', "true");
+            self.robots[i].setAttribute('material', 'color', "white");
             self.robots[i].setAttribute('visible', true);
             self.robots[i].setAttribute('position', {
               x: -1 + Math.random() / 2,
@@ -85,6 +87,7 @@ AFRAME.registerComponent('destroy-mini-robots', {
         });
 
         this.el.addEventListener('disable', function (event) {
+
           self.enabled = false;
           for (var i = 0; i < self.robots.length; i++) {
             self.robots[i].setAttribute('visible', false);
@@ -133,10 +136,7 @@ AFRAME.registerComponent('destroy-mini-robots', {
         }
 
         if (distance < 2) {
-          console.log("HITEABLE!!")
           this.hiteable = true;
-        } else {
-          console.log(distance);
         }
       },
 
@@ -147,12 +147,16 @@ AFRAME.registerComponent('destroy-mini-robots', {
       },
 
       hitStart: function (robot) {
-        console.log(this.enabled, this.hiteable);
-        if (this.enabled && this.hiteable) {
-            robot.setAttribute('visible', false);
-            robot.setAttribute('position', '0 -100 -20');
+        if (this.enabled && this.hiteable && (robot.getAttribute('alive') == "true")) {
+            robot.setAttribute('alive', "false");
+            robot.setAttribute('material', 'color', "red");
+
             this.numRobots -= 1;
             if (this.numRobots == 0){
+              for (var i = 0; i < self.robots.length; i++) {
+                this.robots[i].setAttribute('visible', false);
+                this.robots[i].setAttribute('position', '0 -100 -20');
+              }
 
               this.enabled = false;
               this.finalText = "training end\n\ntime: " + this.totalTime;
